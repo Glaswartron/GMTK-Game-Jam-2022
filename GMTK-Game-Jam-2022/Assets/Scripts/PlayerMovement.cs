@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
             case PlayerState.Idle:
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    currentRange = RollDice(1, 6); // !
+                    currentRange = RollDice(); // !
                     Debug.Log("Würfelzahl: " + currentRange, this);
 
                     bool canMove = HighlightFields();
@@ -135,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Generiert einen zufälligen int aus [minInclusive..maxInclusive]
     /// </summary>
-    public int RollDice(int min, int max)
+    public int RollDice()
     {
         //WICHTIG: Die SelectDice() Methode muss vor dieser Methode aufgerufen werden! Über die UI oder so wahrscheinlich einfach
         currentRange = GameManager.instance.RollDice();
