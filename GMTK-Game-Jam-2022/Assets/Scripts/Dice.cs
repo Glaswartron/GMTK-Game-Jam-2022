@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class Dice : ScriptableObject
 {
     public bool unlocked;
+    public Sprite diceSprite;
 
     public abstract int Roll();
 
