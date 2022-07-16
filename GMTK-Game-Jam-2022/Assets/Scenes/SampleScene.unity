@@ -1532,7 +1532,7 @@ MonoBehaviour:
   diceCount: {fileID: 0}
   rolls: 10
   collectedDices: []
-  defaultDice: {fileID: 0}
+  defaultDice: {fileID: 11400000, guid: eb23aac1b69f6c54fbb356ed2fe9e52a, type: 2}
   diceCapacity: 4
   PlayerStartPosition: {fileID: 0}
 --- !u!4 &1770613941

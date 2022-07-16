@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Dice", menuName = "Dice/Sided Dice")]
 public class SidedDice : Dice
 {
     [Tooltip("Jeder Eintrag ist eine Würfelseite, die ")]
