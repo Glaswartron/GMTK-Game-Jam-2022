@@ -15,4 +15,4 @@ MonoBehaviour:
   unlocked: 0
   diceSprite: {fileID: 0}
   description: 
-  Sides: 
+  Sides: 010000000300000005000000070000000100000003000000

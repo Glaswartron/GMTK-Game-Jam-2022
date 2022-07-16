@@ -11,7 +11,6 @@ public class Field : MonoBehaviour
     public FieldType fieldType;
     public int movementCost;
     public Field[] neighbours;
-    public GameObject highligther;
 
     //Die beiden Sprites sind für alle Fields gleich
     public Sprite highlightedSprite;
@@ -26,7 +25,7 @@ public class Field : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
-    private void Start()
+    protected void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -40,9 +39,8 @@ public class Field : MonoBehaviour
     public void Highlight()
     {
         highlighted = true;
-        highligther.SetActive(true);
         //ToDo: Das Objekt Highlighten.
-        if (walkedOn)
+        if (!walkedOn)
         {
             spriteRenderer.sprite = highlightedSprite;
         }
@@ -55,7 +53,6 @@ public class Field : MonoBehaviour
     public void Unhighlight()
     {
         highlighted = false;
-        highligther.SetActive(false);
         //ToDo: Das Objekt Unhighlighten.
         if (!walkedOn)
         {

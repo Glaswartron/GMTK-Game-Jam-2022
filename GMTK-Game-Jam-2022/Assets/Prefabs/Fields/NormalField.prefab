@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 372770922365303170}
   - component: {fileID: 7371398792165093075}
   m_Layer: 0
-  m_Name: NormalField 1
+  m_Name: NormalField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -186,11 +186,10 @@ MonoBehaviour:
   fieldType: 0
   movementCost: 1
   neighbours: []
-  highligther: {fileID: 2298283377984980410}
-  highlightedSprite: {fileID: 1868725102, guid: 53e260ffba835074ebe915afbde0eb72, type: 3}
-  highlightedWalkedOnSprite: {fileID: 1347605742, guid: 53e260ffba835074ebe915afbde0eb72, type: 3}
+  highlightedSprite: {fileID: 1647613331, guid: 53e260ffba835074ebe915afbde0eb72, type: 3}
+  highlightedWalkedOnSprite: {fileID: 639718480, guid: 53e260ffba835074ebe915afbde0eb72, type: 3}
   normalSprite: {fileID: -262272911, guid: ac22c7549e1a58544be8f765f420b8fd, type: 3}
-  walkedOnSprite: {fileID: 1970898345, guid: 53e260ffba835074ebe915afbde0eb72, type: 3}
+  walkedOnSprite: {fileID: -1522169858, guid: 53e260ffba835074ebe915afbde0eb72, type: 3}
 --- !u!58 &7371398792165093075
 CircleCollider2D:
   m_ObjectHideFlags: 0

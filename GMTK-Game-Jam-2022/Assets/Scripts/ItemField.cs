@@ -13,10 +13,24 @@ public class ItemField : Field
     [Tooltip("Wird nur benutzt, wenn ItemKind = newDice")]
     public Dice dice;
 
+    public GameObject ItemVisual;
+    public bool collected = false;
+
+    private void Start()
+    {
+        base.Start();
+        ItemVisual.SetActive(true);
+    }
+
     public override void FieldAction(int playerDiceResult = 0)
     {
-        //Muss von erbenden klassen implementiert werden, wenn man ein Sonderfeld bauen möchte, das besondere Sachen macht.
-        //pdr = 0, weil nicht jedes Feld, das diese Methode implementiert, diesen Parameter auch benötigt, wenn doch, hier, habt ihr ihn.
+        Debug.Log("FUUUUUUUUUUUUUUUUUUCK");
+        if (!collected)
+        {
+            ApplyItem();
+            PlayerMovement.instance.SetAnimationState("CollectItem");
+            GameManager.instance.OpenItemUI(this);
+        }
     }
 
     public override void OnSelected()
@@ -24,7 +38,6 @@ public class ItemField : Field
         PlayerMovement.instance.SelectField(this);
         highlighted = false;
 
-        ApplyItem();
     }
 
     private void ApplyItem()
@@ -61,9 +74,8 @@ public class ItemField : Field
             case ItemKind.extraRoll:
                 GameManager.instance.IncreaseRollsBy(value);
                 break;
-            case ItemKind.Gold:
-                GameManager.instance.AddGold(value);
-                break;
         }
+        collected = true;
+        ItemVisual.SetActive(false);
     }
 }
