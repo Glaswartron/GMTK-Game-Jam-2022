@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -24,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
     public int swordBonus = 1;
 
     private int currentRange;
+
+    private Action moveToCallback;
 
     private void Start()
     {
@@ -98,38 +101,18 @@ public class PlayerMovement : MonoBehaviour
                     = Vector2.MoveTowards(transform.position, target, movementSpeed * Time.fixedDeltaTime);
                 
                 if ((Vector2)transform.position == target)
-                {
-                    if (currentRange == 0)
-                    {
-                        Debug.Log("Jetzt muss neu gewürfelt werden!", this);
-                        currentState = PlayerState.Idle;
-                    }
-                    else
-                    {
-                        Debug.Log("Verbleibende Züge: " + currentRange, this);
+                    moveToCallback.Invoke();
 
-                        bool canMove = HighlightFields();
-                        if (canMove)
-                            currentState = PlayerState.WaitingForInput;
-                        else // Wenn der Spieler sich mit seiner Range nicht mehr bewegen kann
-                        {
-                            // TODO: Dem Spieler anzeigen, dass er verkackt hat
-                            Debug.Log("Verkackt! Neu würfeln!", this);
-
-                            currentRange = 0;
-                            currentState = PlayerState.Idle;
-                        }
-
-                    }
-                }
                 break;
         }
     }
 
-    public void MoveTo(Vector2 target)
+    public void MoveTo(Vector2 target, Action callback = null)
     {
         this.target = target;
         currentState = PlayerState.Moving;
+
+        moveToCallback = callback;
     }
 
     /// <summary>
@@ -212,7 +195,34 @@ public class PlayerMovement : MonoBehaviour
 
         GameManager.instance.IncreaseTraversedFields();
 
-        MoveTo(currentField.transform.position);
+        MoveTo(currentField.transform.position, OnNormalFieldReached);
+    }
+
+    private void OnNormalFieldReached()
+    {
+        if (currentRange == 0)
+        {
+            Debug.Log("Jetzt muss neu gewürfelt werden!", this);
+            currentState = PlayerState.Idle;
+        }
+        else
+        {
+            Debug.Log("Verbleibende Züge: " + currentRange, this);
+
+            bool canMove = HighlightFields();
+            if (canMove)
+                currentState = PlayerState.WaitingForInput;
+            else // Wenn der Spieler sich mit seiner Range nicht mehr bewegen kann
+            {
+                // TODO: Dem Spieler anzeigen, dass er verkackt hat
+                Debug.Log("Verkackt! Neu würfeln!", this);
+
+                currentRange = 0;
+                currentState = PlayerState.Idle;
+            }
+        }
+
+        currentField.FieldAction();
     }
 
     private int CalculateMovementCost(Field field)

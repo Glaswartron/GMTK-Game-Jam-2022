@@ -371,8 +371,12 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.ref.dll"
+"Assets/Scripts/Dice/Dice.cs"
+"Assets/Scripts/Dice/RangeDice.cs"
+"Assets/Scripts/Dice/SidedDice.cs"
 "Assets/Scripts/EnemyField.cs"
 "Assets/Scripts/Field.cs"
+"Assets/Scripts/GameManager.cs"
 "Assets/Scripts/ItemField.cs"
 "Assets/Scripts/PlayerMovement.cs"
 -langversion:9.0
