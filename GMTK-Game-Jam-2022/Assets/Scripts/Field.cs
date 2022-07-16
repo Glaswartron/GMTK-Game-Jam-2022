@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public enum FieldType { Normal, Sand, Water, Ice}
@@ -11,6 +12,10 @@ public class Field : MonoBehaviour
     protected bool highlighted;
     public List<Field> neighbours;
 
+    private void Start()
+    {
+        neighbours = new List<Field>();
+    }
 
     public virtual void FieldAction(int playerDiceResult = 0)
     {
@@ -45,4 +50,16 @@ public class Field : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        if (neighbours != null)
+        {
+            // Für jeden Nachbar...
+            for (int i = 0; i < neighbours.Count; i++)
+            {
+                // Wird eine Linie mit Dicke 2 zu diesem Nachbar gezeichnet
+                Handles.DrawAAPolyLine(2, transform.position, neighbours[i].transform.position);
+            }
+        }
+    }
 }
