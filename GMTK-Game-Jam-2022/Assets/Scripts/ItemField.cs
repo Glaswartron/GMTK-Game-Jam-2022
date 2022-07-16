@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemKind { Sword, Brett, SandBoots, lens, extraDice, Gold, CoinDice, OctoDice}
+public enum ItemKind { Sword, Brett, SandBoots, lens, extraRoll, Gold, newDice} 
 
 public class ItemField : Field
 {
     [Header("Item-Stuff")]
     public ItemKind item;
+    [Tooltip("Wenn man eine ItemKind ausgewählt hat, die einen Value hat, z.B. extraRoll oder Gold")]
+    public int value;
+    [Tooltip("Wird nur benutzt, wenn ItemKind = newDice")]
+    public Dice dice;
 
     public override void FieldAction(int playerDiceResult = 0)
     {
@@ -46,15 +50,17 @@ public class ItemField : Field
                     player.SetSandBoots(true);
                 }
                 break;
+            case ItemKind.newDice:
+                if(!GameManager.instance.DiceInventoryFull())
+                {
+                    GameManager.instance.UnlockDice(dice);
+                }
+                break;
             case ItemKind.lens:
                 break;
-            case ItemKind.extraDice:
+            case ItemKind.extraRoll:
                 break;
             case ItemKind.Gold:
-                break;
-            case ItemKind.CoinDice:
-                break;
-            case ItemKind.OctoDice:
                 break;
         }
     }

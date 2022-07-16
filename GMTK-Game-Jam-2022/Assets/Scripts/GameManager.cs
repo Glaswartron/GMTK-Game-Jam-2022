@@ -12,10 +12,9 @@ public class GameManager : MonoBehaviour
     public GameObject playerUI;
     public TextMeshProUGUI diceCount;
 
+    [Header("Dice Stuff")]
     [Tooltip("Die Anzahl an Würfelwürfen, die der Spieler hat")]
     public int rolls;
-
-    [Header("Dice Stuff")]
     //public Dice[] allDices;
     public List<Dice> collectedDices;
     public Dice defaultDice;
@@ -27,6 +26,9 @@ public class GameManager : MonoBehaviour
     private int cummulatedEyes;
     private int traversedFields;
 
+    [Header("Technical Stuff")]
+    public Transform PlayerStartPosition;
+
     private void Start()
     {
         instance = this;
@@ -34,6 +36,12 @@ public class GameManager : MonoBehaviour
         collectedDices[0] = defaultDice;
     }
 
+    public void IncreaseTraversedFields()
+    {
+        traversedFields++;
+    }
+
+    #region Dice
     //Standardmäßig wird der Default Dice ausgewählt
     public void SelectDice(int i = 0)
     {
@@ -68,8 +76,37 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public bool DiceInventoryFull()
+    {
+        return collectedDices.Count == 4;
+    }
+
+    public void IncreaseRollsBy(int amount)
+    {
+        rolls += amount;
+    }
+    #endregion
+
+    #region GameOver
+
     public void GameOver()
+    {
+        gameOverScreen.SetActive(true);
+    }
+
+    public void Retry()
+    {
+        //ToDo: Resette alles
+    }
+
+    public void BackToMainMenu()
     {
 
     }
+
+    public void ShowScore(TextMeshProUGUI tmpro)
+    {
+        tmpro.text = "Accumulated Eye-Sum: " + cummulatedEyes.ToString() + "\n" + "Fields traversed: " + traversedFields.ToString();
+    }
+    #endregion
 }

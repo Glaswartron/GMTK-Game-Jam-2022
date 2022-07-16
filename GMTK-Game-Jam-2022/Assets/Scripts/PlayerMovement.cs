@@ -15,9 +15,13 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 target;
 
-    private bool sword = false;
-    private bool brett = false;
-    private bool sandboots = false;
+    public bool sword = false;
+    public bool brett = false;
+    public bool sandboots = false;
+
+    public int sandBootsBonus = 1;
+    public int brettBonus = 1;
+    public int swordBonus = 1;
 
     private int currentRange;
 
@@ -133,7 +137,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public int RollDice(int min, int max)
     {
-        currentRange = Random.Range(min, max+1);
+        //WICHTIG: Die SelectDice() Methode muss vor dieser Methode aufgerufen werden! Über die UI oder so wahrscheinlich einfach
+        currentRange = GameManager.instance.RollDice();
         return currentRange;
     }
 
@@ -148,6 +153,26 @@ public class PlayerMovement : MonoBehaviour
         if(currentRange < 0) { currentRange = 0; }
     }
 
+    public bool CheckDistance(Field field)
+    {
+        switch(field.fieldType)
+        {
+            case FieldType.Sand:
+                if(sandboots)
+                {
+                    return field.movementCost - sandBootsBonus <= currentRange;
+                }
+                break;
+            case FieldType.Water:
+                if(brett)
+                {
+                    return field.movementCost - brettBonus <= currentRange;
+                }
+                break;
+        }
+        return field.movementCost <= currentRange;
+    }
+
     /// <summary>
     /// Markiert alle benachbarten Felder, auf die der Spieler sich
     /// basierend auf <see cref="currentRange"/> bewegen kann
@@ -159,7 +184,7 @@ public class PlayerMovement : MonoBehaviour
         bool somethingHighlighted = false;
         foreach (var field in currentField.neighbours)
         {
-            if (field.movementCost <= currentRange)
+            if (CheckDistance(field))
             {
                 field.Highlight();
                 somethingHighlighted = true;
@@ -183,9 +208,31 @@ public class PlayerMovement : MonoBehaviour
         }
 
         currentField = selectedField;
-        currentRange -= selectedField.movementCost;
+        currentRange -= CalculateMovementCost(selectedField);
+
+        GameManager.instance.IncreaseTraversedFields();
 
         MoveTo(currentField.transform.position);
+    }
+
+    private int CalculateMovementCost(Field field)
+    {
+        switch (field.fieldType)
+        {
+            case FieldType.Sand:
+                if (sandboots)
+                {
+                    return field.movementCost - sandBootsBonus;
+                }
+                break;
+            case FieldType.Water:
+                if (brett)
+                {
+                    return field.movementCost - brettBonus;
+                }
+                break;
+        }
+        return field.movementCost;
     }
 
     #region Getter und Setter

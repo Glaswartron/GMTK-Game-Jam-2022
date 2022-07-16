@@ -380,7 +380,7 @@
 "Assets/Scripts/Field.cs"
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/ItemField.cs"
-"Assets/Scripts/PODPlayerMovement.cs"
+"Assets/Scripts/PlayerMovement.cs"
 -langversion:9.0
 
 /deterministic
