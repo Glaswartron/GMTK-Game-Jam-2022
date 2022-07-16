@@ -12,6 +12,10 @@ public class PODPlayerMovement : MonoBehaviour
     public Field currentField;
     public PlayerState currentState;
 
+    private bool sword = false;
+    private bool brett = false;
+    private bool sandboots = false;
+
     private int currentRange;
 
     private void Start()
@@ -86,6 +90,37 @@ public class PODPlayerMovement : MonoBehaviour
         currentState = PlayerState.Moving;
     }
 
+    #region Getter und Setter
+    public bool GetSword()
+    {
+        return sword;
+    }
+
+    public bool GetBrett()
+    {
+        return brett;
+    }
+
+    public bool GetBoots()
+    {
+        return sandboots;
+    }
+
+    public void SetSword(bool state)
+    {
+        sword = state;
+    }
+
+    public void SetBrett(bool state)
+    {
+        brett = state;
+    }
+
+    public void SetSandBoots(bool state)
+    {
+        sandboots = state;
+    }
+    #endregion
 
 
 }
