@@ -6,6 +6,12 @@ public class CameraFollow : MonoBehaviour
 {
     public Transform player;
     public int ZoomOutFactor = 2;
+    public static CameraFollow instance;
+
+    private void Start()
+    {
+        instance = this;
+    }
     // Update is called once per frame
     void Update()
     {

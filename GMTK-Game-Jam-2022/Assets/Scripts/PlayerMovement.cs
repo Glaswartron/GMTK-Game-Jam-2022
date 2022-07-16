@@ -185,13 +185,14 @@ public class PlayerMovement : MonoBehaviour
             case FieldType.Sand:
                 if(sandboots)
                 {
-                    return field.movementCost - sandBootsBonus <= currentRange;
+                    Debug.Log(field.movementCost - sandBootsBonus);
+                    return (field.movementCost - sandBootsBonus) <= currentRange;
                 }
                 break;
             case FieldType.Water:
                 if(brett)
                 {
-                    return field.movementCost - brettBonus <= currentRange;
+                    return (field.movementCost - brettBonus) <= currentRange;
                 }
                 break;
         }

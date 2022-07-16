@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68ac7043671cf3f4dbb4a568bec4840f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fieldType: 0
+  fieldType: 1
   movementCost: 2
   neighbours: []
   highlightedSprite: {fileID: 1647613331, guid: 53e260ffba835074ebe915afbde0eb72, type: 3}
