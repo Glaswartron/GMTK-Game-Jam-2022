@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//[CreateAssetMenu(fileName = "Dice", menuName = "Dice")]
 public abstract class Dice : ScriptableObject
 {
     public bool unlocked;

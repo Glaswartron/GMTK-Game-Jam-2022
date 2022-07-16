@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         collectedDices = new List<Dice>();
-        collectedDices[0] = defaultDice;
+        collectedDices.Add(defaultDice);
     }
 
     public void IncreaseTraversedFields()
@@ -55,7 +55,12 @@ public class GameManager : MonoBehaviour
         {
             GameOver();
         }
-        diceCount.SetText(rolls.ToString()); //UI
+        //diceCount.SetText(rolls.ToString()); //UI
+
+        if(currentDice == null) //Sollte eigentlich NIE vorkommen
+        {
+            currentDice = defaultDice;
+        }
 
         int res = currentDice.Roll();
         cummulatedEyes += res; //Für die Statistik
