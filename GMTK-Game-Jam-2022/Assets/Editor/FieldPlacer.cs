@@ -103,11 +103,11 @@ public class FieldPlacer : EditorWindow
 
                     field1NeighboursProp.arraySize++;
                     field1NeighboursProp.GetArrayElementAtIndex(field1NeighboursProp.arraySize - 1)
-                                       .objectReferenceValue = field2SO.targetObject;
+                                        .objectReferenceValue = field2SO.targetObject;
 
                     field2NeighboursProp.arraySize++;
                     field2NeighboursProp.GetArrayElementAtIndex(field2NeighboursProp.arraySize - 1)
-                                       .objectReferenceValue = field1SO.targetObject;
+                                        .objectReferenceValue = field1SO.targetObject;
 
                     // Mit Undo
                     field1SO.ApplyModifiedPropertiesWithoutUndo();
@@ -155,10 +155,12 @@ public class FieldPlacer : EditorWindow
                     /*field.neighbours.Add(lastField);
                     lastField.neighbours.Add(instantiatedObject.GetComponent<Field>());*/
 
+                    fieldSO.Update();
                     fieldNeighboursProp.arraySize++;
                     fieldNeighboursProp.GetArrayElementAtIndex(fieldNeighboursProp.arraySize - 1)
                                        .objectReferenceValue = lastFieldSO.targetObject;
 
+                    lastFieldSO.Update();
                     SerializedProperty lastFieldNeighboursProp = lastFieldSO.FindProperty("neighbours");
                     lastFieldNeighboursProp.arraySize++;
                     lastFieldNeighboursProp.GetArrayElementAtIndex(lastFieldNeighboursProp.arraySize - 1)
@@ -170,7 +172,7 @@ public class FieldPlacer : EditorWindow
                       && Selection.count == 1 && Selection.objects[0] is GameObject)
                 {
                     Field selectedField = ((GameObject)Selection.objects[0]).GetComponent<Field>();
-                    SerializedObject selectedFieldSO = new SerializedObject(field);
+                    SerializedObject selectedFieldSO = new SerializedObject(selectedField);
 
                     if (selectedField != null)
                         lastFields.Add(selectedFieldSO);
@@ -178,10 +180,12 @@ public class FieldPlacer : EditorWindow
                     /*field.neighbours.Add(selectedField);
                     selectedField.neighbours.Add(field);*/
 
+                    fieldSO.Update();
                     fieldNeighboursProp.arraySize++;
                     fieldNeighboursProp.GetArrayElementAtIndex(fieldNeighboursProp.arraySize - 1)
                                        .objectReferenceValue = selectedFieldSO.targetObject;
 
+                    selectedFieldSO.Update();
                     SerializedProperty selectedFieldNeighboursProp = selectedFieldSO.FindProperty("neighbours");
                     selectedFieldNeighboursProp.arraySize++;
                     selectedFieldNeighboursProp.GetArrayElementAtIndex(selectedFieldNeighboursProp.arraySize - 1)

@@ -16,9 +16,10 @@ public class ItemField : Field
     public GameObject ItemVisual;
     public bool collected = false;
 
-    private void Start()
+    protected override void Start()
     {
         base.Start();
+
         ItemVisual.SetActive(true);
     }
 
