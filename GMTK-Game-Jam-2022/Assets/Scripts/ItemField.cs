@@ -25,11 +25,12 @@ public class ItemField : Field
 
     public override void FieldAction(int playerDiceResult = 0)
     {
-        Debug.Log("FUUUUUUUUUUUUUUUUUUCK");
+        //Debug.Log("FUUUUUUUUUUUUUUUUUUCK");
         if (!collected)
         {
             ApplyItem();
-            PlayerMovement.instance.SetAnimationState("PlayerObtainItem");
+            //PlayerMovement.instance.SetAnimationState("PlayerObtainItem");
+            PlayerMovement.instance.HoldUpItem(true);
             GameManager.instance.OpenItemUI(this);
         }
     }
@@ -47,19 +48,19 @@ public class ItemField : Field
         switch(item)    //Die ersten drei Cases beeinflussen das Movement vom Player direkt, die anderen nicht, die werden nict über den Player gehandelt
         {
             case ItemKind.Sword:
-                if(player.GetSword())
+                if(!player.GetSword())
                 {
                     player.SetSword(true);
                 }
                 break;
             case ItemKind.Brett:
-                if (player.GetBrett())
+                if (!player.GetBrett())
                 {
                     player.SetBrett(true);
                 }
                 break;
             case ItemKind.SandBoots:
-                if (player.GetBoots())
+                if (!player.GetBoots())
                 {
                     player.SetSandBoots(true);
                 }
@@ -71,6 +72,7 @@ public class ItemField : Field
                 }
                 break;
             case ItemKind.lens:
+                CameraFollow.instance.ZoomOut();
                 break;
             case ItemKind.extraRoll:
                 GameManager.instance.IncreaseRollsBy(value);

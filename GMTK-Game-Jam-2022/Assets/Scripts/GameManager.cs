@@ -34,6 +34,9 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI itemName;
     public TextMeshProUGUI itemDescription;
     public Image itemImage;
+    public Sprite BootsSprite;
+    public Sprite SwordSprite;
+    public Sprite BrettSprite;
 
     [Header("Main UI")]
     public GameObject Holder;
@@ -122,13 +125,13 @@ public class GameManager : MonoBehaviour
                 ItemUISetUp(item.dice.diceSprite, item.dice.description, item.dice.name);
                 break;
             case ItemKind.Brett:
-                ItemUISetUp(null, "Neat, a piece of wood! With that you can ride waves! Your water-traversal costs will decrease by "+ PlayerMovement.instance.brettBonus.ToString()+".", "Wooden Board");
+                ItemUISetUp(BrettSprite, "Neat, a piece of wood! With that you can ride waves! Your water-traversal costs will decrease by "+ PlayerMovement.instance.brettBonus.ToString()+".", "Wooden Board");
                 break;
             case ItemKind.Sword:
-                ItemUISetUp(null, "Neat, a better sword! With that you can fight enemies better! The damage you deal is increased by " + PlayerMovement.instance.swordBonus.ToString() + ".", "Hero's Sword");
+                ItemUISetUp(SwordSprite, "Neat, a better sword! With that you can fight enemies better! The damage you deal is increased by " + PlayerMovement.instance.swordBonus.ToString() + ".", "Hero's Sword");
                 break;
             case ItemKind.SandBoots:
-                ItemUISetUp(null, "Neat, better boots! With them you can glide over sand! Your sand-traversal costs will decrease by " + PlayerMovement.instance.sandBootsBonus.ToString() + ".", "Desert Boots");
+                ItemUISetUp(BootsSprite, "Neat, better boots! With them you can glide over sand! Your sand-traversal costs will decrease by " + PlayerMovement.instance.sandBootsBonus.ToString() + ".", "Desert Boots");
                 break;
             case ItemKind.lens:
                 ItemUISetUp(null, "Neat, a piece of our world's map! With that you see more of our planet! Your sight will", "Map-Piece");
@@ -146,7 +149,7 @@ public class GameManager : MonoBehaviour
     public void ItemUIButtonEvent()
     {
         itemUI.SetActive(false);
-        PlayerMovement.instance.HoldUpItem(true);
+        PlayerMovement.instance.HoldUpItem(false);
     }
     #endregion
 
