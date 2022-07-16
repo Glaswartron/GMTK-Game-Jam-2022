@@ -12,7 +12,7 @@ public class FieldPlacer : EditorWindow
 
     private int currentPrefabIdx;
 
-    private List<Transform> lastFields;
+    private List<SerializedObject> lastFields;
 
     private bool placing = true;
 
@@ -23,7 +23,7 @@ public class FieldPlacer : EditorWindow
     {
         currentPrefabIdx = 0;
 
-        lastFields = new List<Transform>();
+        lastFields = new List<SerializedObject>();
 
         // Alle Prefabs aus dem Ordner Assets/Prefabs/Fields als GameObjects laden
         string [] assetGUIDs = AssetDatabase.FindAssets("t:prefab", new string[] { "Assets/Prefabs/Fields" });
@@ -60,13 +60,16 @@ public class FieldPlacer : EditorWindow
     {
         for (int i = 0; i < prefabs.Length; i++)
         {
-            EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button(sprites[i]))
+            GUILayout.BeginVertical();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(prefabs[i].name);
+            if (GUILayout.Button(sprites[i], GUILayout.Width(180), GUILayout.Height(60)))
             {
                 int localI = i;
                 currentPrefabIdx = localI;
             }
-            EditorGUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
         }
     }
 
@@ -87,13 +90,28 @@ public class FieldPlacer : EditorWindow
             {
                 if (Selection.count == 2 && Selection.objects[0] is GameObject && Selection.objects[1] is GameObject)
                 {
-                    Field testField1 = ((GameObject)Selection.objects[0]).GetComponent<Field>();
-                    Field testField2 = ((GameObject)Selection.objects[1]).GetComponent<Field>();
-                    if (testField1 == null || testField2 == null)
+                    Field field1 = ((GameObject)Selection.objects[0]).GetComponent<Field>();
+                    Field field2 = ((GameObject)Selection.objects[1]).GetComponent<Field>();
+                    if (field1 == null || field2 == null)
                         return;
 
-                    testField1.neighbours.Add(testField2);
-                    testField2.neighbours.Add(testField1);
+                    SerializedObject field1SO = new SerializedObject(field1);
+                    SerializedObject field2SO = new SerializedObject(field2);
+
+                    SerializedProperty field1NeighboursProp = field1SO.FindProperty("neighbours");
+                    SerializedProperty field2NeighboursProp = field2SO.FindProperty("neighbours");
+
+                    field1NeighboursProp.arraySize++;
+                    field1NeighboursProp.GetArrayElementAtIndex(field1NeighboursProp.arraySize - 1)
+                                       .objectReferenceValue = field2SO.targetObject;
+
+                    field2NeighboursProp.arraySize++;
+                    field2NeighboursProp.GetArrayElementAtIndex(field2NeighboursProp.arraySize - 1)
+                                       .objectReferenceValue = field1SO.targetObject;
+
+                    // Mit Undo
+                    field1SO.ApplyModifiedPropertiesWithoutUndo();
+                    field2SO.ApplyModifiedPropertiesWithoutUndo();
                 }
 
                 Event.current.Use();
@@ -124,31 +142,61 @@ public class FieldPlacer : EditorWindow
             instantiatedObject.transform.position = realMousePosition;
 
             Field field = instantiatedObject.GetComponent<Field>();
+            SerializedObject fieldSO = new SerializedObject(field);
 
             // Wenn man beim Platzieren Shift gedrückt hält, werden die Felder miteinander verbunden
             if (Event.current.shift)
             {
+                SerializedProperty fieldNeighboursProp = fieldSO.FindProperty("neighbours");
+
                 if (lastFields.Count > 0) // Standardfall: Neues Feld wird mit vorherigem verbunden
                 {
-                    Field lastField = lastFields[lastFields.Count - 1].GetComponent<Field>();
-                    field.neighbours.Add(lastField);
-                    lastField.neighbours.Add(instantiatedObject.GetComponent<Field>());
+                    SerializedObject lastFieldSO = lastFields[lastFields.Count - 1];
+                    /*field.neighbours.Add(lastField);
+                    lastField.neighbours.Add(instantiatedObject.GetComponent<Field>());*/
+
+                    fieldNeighboursProp.arraySize++;
+                    fieldNeighboursProp.GetArrayElementAtIndex(fieldNeighboursProp.arraySize - 1)
+                                       .objectReferenceValue = lastFieldSO.targetObject;
+
+                    SerializedProperty lastFieldNeighboursProp = lastFieldSO.FindProperty("neighbours");
+                    lastFieldNeighboursProp.arraySize++;
+                    lastFieldNeighboursProp.GetArrayElementAtIndex(lastFieldNeighboursProp.arraySize - 1)
+                                           .objectReferenceValue = fieldSO.targetObject;
+
+                    lastFieldSO.ApplyModifiedPropertiesWithoutUndo();
                 }
                 else if (lastFields.Count == 0 // Ein Feld wurde ausgewählt, das nächste soll mit ihm verbunden werden
                       && Selection.count == 1 && Selection.objects[0] is GameObject)
                 {
                     Field selectedField = ((GameObject)Selection.objects[0]).GetComponent<Field>();
-                    if (selectedField != null)
-                        lastFields.Add(selectedField.transform);
+                    SerializedObject selectedFieldSO = new SerializedObject(field);
 
-                    field.neighbours.Add(selectedField);
-                    selectedField.neighbours.Add(field);
+                    if (selectedField != null)
+                        lastFields.Add(selectedFieldSO);
+
+                    /*field.neighbours.Add(selectedField);
+                    selectedField.neighbours.Add(field);*/
+
+                    fieldNeighboursProp.arraySize++;
+                    fieldNeighboursProp.GetArrayElementAtIndex(fieldNeighboursProp.arraySize - 1)
+                                       .objectReferenceValue = selectedField;
+
+
+                    SerializedProperty selectedFieldNeighboursProp = selectedFieldSO.FindProperty("neighbours");
+                    selectedFieldNeighboursProp.arraySize++;
+                    selectedFieldNeighboursProp.GetArrayElementAtIndex(selectedFieldNeighboursProp.arraySize - 1)
+                                               .objectReferenceValue = field;
+
+                    selectedFieldSO.ApplyModifiedPropertiesWithoutUndo();
                 }
+
+                fieldSO.ApplyModifiedPropertiesWithoutUndo();
             }
             else
                 lastFields.Clear();
 
-            lastFields.Add(instantiatedObject.transform);
+            lastFields.Add(fieldSO);
 
             Event.current.Use();
         }

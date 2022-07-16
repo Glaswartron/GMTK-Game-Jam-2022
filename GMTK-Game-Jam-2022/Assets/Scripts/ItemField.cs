@@ -15,9 +15,9 @@ public class ItemField : Field
         //pdr = 0, weil nicht jedes Feld, das diese Methode implementiert, diesen Parameter auch benötigt, wenn doch, hier, habt ihr ihn.
     }
 
-    public virtual void OnSelected()
+    public override void OnSelected()
     {
-        PODPlayerMovement.instance.SelectField(this);
+        PlayerMovement.instance.SelectField(this);
         highlighted = false;
 
         ApplyItem();
@@ -25,7 +25,7 @@ public class ItemField : Field
 
     private void ApplyItem()
     {
-        PODPlayerMovement player = PODPlayerMovement.instance;
+        PlayerMovement player = PlayerMovement.instance;
         switch(item)    //Die ersten drei Cases beeinflussen das Movement vom Player direkt, die anderen nicht, die werden nict über den Player gehandelt
         {
             case ItemKind.Sword:

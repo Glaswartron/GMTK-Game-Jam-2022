@@ -17,7 +17,7 @@ public class EnemyField : Field
     {
         //ToDo: Kampfanimation
         HP -= playerDiceResult;
-        PODPlayerMovement.instance.SubtractRange(HP);
+        PlayerMovement.instance.SubtractRange(HP);
         if (HP < 0) { HP = 0; }
 
         return HP == 0;
@@ -25,13 +25,13 @@ public class EnemyField : Field
 
     public override void OnSelected()
     {
-        if (Fight(PODPlayerMovement.instance.GetCurrentRange())) //Wird in der If-Clause ausgeführt
+        if (Fight(PlayerMovement.instance.GetCurrentRange())) //Wird in der If-Clause ausgeführt
         {
-            PODPlayerMovement.instance.SelectField(this);   //Spieler geht auf das Gegnerfeld rauf
+            PlayerMovement.instance.SelectField(this);   //Spieler geht auf das Gegnerfeld rauf
         }
         else
         {
-            PODPlayerMovement.instance.SelectField(PODPlayerMovement.instance.currentField);   //SPieler muss auf seinem aktuellem Feld bleiben
+            PlayerMovement.instance.SelectField(PlayerMovement.instance.currentField);   //SPieler muss auf seinem aktuellem Feld bleiben
         }
         highlighted = false;
     }

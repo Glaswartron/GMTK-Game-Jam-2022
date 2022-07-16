@@ -373,7 +373,8 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/EnemyField.cs"
 "Assets/Scripts/Field.cs"
-"Assets/Scripts/PODPlayerMovement.cs"
+"Assets/Scripts/ItemField.cs"
+"Assets/Scripts/PlayerMovement.cs"
 -langversion:9.0
 
 /deterministic

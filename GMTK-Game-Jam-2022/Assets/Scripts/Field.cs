@@ -5,16 +5,19 @@ using UnityEngine;
 
 public enum FieldType { Normal, Sand, Water, Ice}
 
+[ExecuteInEditMode]
 public class Field : MonoBehaviour
 {
     public FieldType fieldType;
     public int movementCost;
+    public Field[] neighbours;
+    public GameObject highligther;
+
     protected bool highlighted;
-    public List<Field> neighbours;
 
     private void Start()
     {
-        neighbours = new List<Field>();
+
     }
 
     public virtual void FieldAction(int playerDiceResult = 0)
@@ -26,19 +29,20 @@ public class Field : MonoBehaviour
     public void Highlight()
     {
         highlighted = true;
+        highligther.SetActive(true);
         //ToDo: Das Objekt Highlighten.
     }
 
-    public void UnLight()
+    public void Unhighlight()
     {
         highlighted = false;
-        //ToDo: Das Objekt Highlighten.
+        highligther.SetActive(false);
+        //ToDo: Das Objekt Unhighlighten.
     }
 
     public virtual void OnSelected()
     {
-        PODPlayerMovement.instance.SelectField(this);
-        highlighted = false;
+        PlayerMovement.instance.SelectField(this); // Unhighlighted die Felder
     }
 
     //Wichtig, damit das geht, brauchen die Fields Collider!!! Glaube ich
@@ -55,11 +59,23 @@ public class Field : MonoBehaviour
         if (neighbours != null)
         {
             // Für jeden Nachbar...
-            for (int i = 0; i < neighbours.Count; i++)
+            for (int i = 0; i < neighbours.Length; i++)
             {
                 // Wird eine Linie mit Dicke 2 zu diesem Nachbar gezeichnet
                 Handles.DrawAAPolyLine(2, transform.position, neighbours[i].transform.position);
             }
         }
     }
+
+    private void OnDestroy()
+    {
+        foreach (Field neighbour in neighbours)
+        {
+            SerializedObject neighbourSO = new SerializedObject(neighbour);
+            SerializedProperty neighbourNeighboursProp = neighbourSO.FindProperty("neighbours");
+            neighbourNeighboursProp.DeleteArrayElementAtIndex(System.Array.IndexOf(neighbour.neighbours, this));
+            neighbourSO.ApplyModifiedPropertiesWithoutUndo();
+        }
+    }
+
 }
