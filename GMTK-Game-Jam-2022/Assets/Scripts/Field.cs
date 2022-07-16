@@ -13,11 +13,22 @@ public class Field : MonoBehaviour
     public Field[] neighbours;
     public GameObject highligther;
 
+    //Die beiden Sprites sind für alle Fields gleich
+    public Sprite highlightedSprite;
+    public Sprite highlightedWalkedOnSprite;
+
+    //Die Sprite unterscheidet sich je nach FieldType
+    public Sprite normalSprite;
+    public Sprite walkedOnSprite;
+
     protected bool highlighted;
+    protected bool walkedOn = false;
+
+    private SpriteRenderer spriteRenderer;
 
     private void Start()
     {
-
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public virtual void FieldAction(int playerDiceResult = 0)
@@ -31,6 +42,14 @@ public class Field : MonoBehaviour
         highlighted = true;
         highligther.SetActive(true);
         //ToDo: Das Objekt Highlighten.
+        if (walkedOn)
+        {
+            spriteRenderer.sprite = highlightedSprite;
+        }
+        else
+        {
+            spriteRenderer.sprite = highlightedWalkedOnSprite;
+        }
     }
 
     public void Unhighlight()
@@ -38,11 +57,24 @@ public class Field : MonoBehaviour
         highlighted = false;
         highligther.SetActive(false);
         //ToDo: Das Objekt Unhighlighten.
+        if (!walkedOn)
+        {
+            spriteRenderer.sprite = normalSprite;
+        }
+        else
+        {
+            spriteRenderer.sprite = walkedOnSprite;
+        }
     }
 
     public virtual void OnSelected()
     {
         PlayerMovement.instance.SelectField(this); // Unhighlighted die Felder
+    }
+
+    public void GetWalkedOn()   //Das muss im Player aufgerufen werden, wenn das Feld betreten wird
+    {
+        walkedOn = true;
     }
 
     //Wichtig, damit das geht, brauchen die Fields Collider!!! Glaube ich

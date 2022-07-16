@@ -187,6 +187,10 @@ MonoBehaviour:
   movementCost: 1
   neighbours: []
   highligther: {fileID: 2298283377984980410}
+  highlightedSprite: {fileID: 1868725102, guid: 53e260ffba835074ebe915afbde0eb72, type: 3}
+  highlightedWalkedOnSprite: {fileID: 1347605742, guid: 53e260ffba835074ebe915afbde0eb72, type: 3}
+  normalSprite: {fileID: -262272911, guid: ac22c7549e1a58544be8f765f420b8fd, type: 3}
+  walkedOnSprite: {fileID: 1970898345, guid: 53e260ffba835074ebe915afbde0eb72, type: 3}
 --- !u!58 &7371398792165093075
 CircleCollider2D:
   m_ObjectHideFlags: 0
