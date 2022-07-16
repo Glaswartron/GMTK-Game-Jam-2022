@@ -16,8 +16,12 @@ public class GameManager : MonoBehaviour
     public int rolls;
 
     [Header("Dice Stuff")]
-    public Dice[] dices;
+    //public Dice[] allDices;
+    public List<Dice> collectedDices;
+    public Dice defaultDice;
     private Dice currentDice;
+    [Tooltip("Die Anzahl an Würfeln, die man tragen kann")]
+    public int diceCapacity;
 
     [Header("Metrics")]
     private int cummulatedEyes;
@@ -26,12 +30,14 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         instance = this;
+        collectedDices = new List<Dice>();
+        collectedDices[0] = defaultDice;
     }
 
     //Standardmäßig wird der Default Dice ausgewählt
     public void SelectDice(int i = 0)
     {
-        currentDice = dices[i];
+        currentDice = collectedDices[i];
     }
 
     public int RollDice()
@@ -47,6 +53,19 @@ public class GameManager : MonoBehaviour
         cummulatedEyes += res; //Für die Statistik
 
         return res;
+    }
+
+    public void UnlockDice(Dice dice)
+    {
+        if(collectedDices.Count < diceCapacity)
+        {
+            collectedDices.Add(dice);
+        }
+        else
+        {
+            Debug.Log("Du trägst schon " + diceCapacity + "Würfel mit dir");
+            //ToDo: Eine Nope Animation spielen
+        }
     }
 
     public void GameOver()
