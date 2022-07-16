@@ -6,12 +6,12 @@ public class EnemyField : Field
 {
     [Header("Enemy Stuff")]
     public int HP;
-    private Stats stats;
+    public Stats stats;
     //ToDo: Enemy Visual einbauen
 
     private void Start()
     {
-        stats = new Stats(HP);  //Alles wird auf das Objekt ausgelagert, damit die Originalwerte nicht verändert werden müssen
+        stats = new Stats(HP);  // Alles wird auf das Objekt ausgelagert, damit die Originalwerte nicht verändert werden müssen
     }
 
     public override void FieldAction(int playerDiceResult = 0)
@@ -28,21 +28,11 @@ public class EnemyField : Field
         return stats.IsDead();
     }
 
-    public override void OnSelected()
-    {
-        if (Fight(PlayerMovement.instance.GetCurrentRange())) //Wird in der If-Clause ausgeführt
-        {
-            PlayerMovement.instance.SelectField(this);   //Spieler geht auf das Gegnerfeld rauf
-        }
-        else
-        {
-            PlayerMovement.instance.SelectField(PlayerMovement.instance.currentField);   //SPieler muss auf seinem aktuellem Feld bleiben
-        }
-        highlighted = false;
-    }
-
-    //Eine innere Klasse, damit die originalen Werte nicht angefasst werden müssen. Vlt wichtig, wenn man später das Spiel resetten möchte
-    private class Stats
+    /// <summary>
+    /// Eine innere Klasse, damit die originalen Werte nicht angefasst werden müssen.
+    /// Vlt wichtig, wenn man später das Spiel resetten möchte
+    /// </summary>
+    public class Stats
     {
         private int HP;
 
@@ -53,7 +43,7 @@ public class EnemyField : Field
 
         public void ReduceHP(int dmg)
         {
-            if(PlayerMovement.instance.sword)
+            if (PlayerMovement.instance.sword)
             {
                 dmg += PlayerMovement.instance.swordBonus;  //Schwert-Bonusschaden wird hier draufgerechnet
             }

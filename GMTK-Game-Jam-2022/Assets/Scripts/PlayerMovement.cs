@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public enum PlayerState {Idle, Moving, WaitingForInput, WaitingForField};
+public enum PlayerState {Idle, Moving, WaitingForInput, WaitingForField, Attacking};
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -26,11 +26,15 @@ public class PlayerMovement : MonoBehaviour
 
     private int currentRange;
 
-    private Action moveToCallback;
+    private Action<Field> moveToCallback;
+
+    private Animator animator;
 
     private void Start()
     {
         instance = this;
+
+        animator = GetComponent<Animator>();
 
         // Position vom Spieler in die Mitte vom ersten Feld setzen
         transform.position = currentField.transform.position;
@@ -101,13 +105,13 @@ public class PlayerMovement : MonoBehaviour
                     = Vector2.MoveTowards(transform.position, target, movementSpeed * Time.fixedDeltaTime);
                 
                 if ((Vector2)transform.position == target)
-                    moveToCallback.Invoke();
+                    moveToCallback.Invoke(currentField);
 
                 break;
         }
     }
 
-    public void MoveTo(Vector2 target, Action callback = null)
+    public void MoveTo(Vector2 target, Action<Field> callback = null)
     {
         this.target = target;
         currentState = PlayerState.Moving;
@@ -190,16 +194,31 @@ public class PlayerMovement : MonoBehaviour
             field.Unhighlight();
         }
 
-        currentField = selectedField;
-        currentRange -= CalculateMovementCost(selectedField);
+        if (!(selectedField is EnemyField) || ((EnemyField)selectedField).stats.GetHP() <= 0)
+        {
+            currentField = selectedField;
+            currentRange -= CalculateMovementCost(selectedField);
 
-        GameManager.instance.IncreaseTraversedFields();
+            GameManager.instance.IncreaseTraversedFields();
 
-        MoveTo(currentField.transform.position, OnNormalFieldReached);
+            MoveTo(currentField.transform.position, OnFieldReached);
+        } 
+        else
+        {
+            Vector2 hereToThereDir = (selectedField.transform.position - currentField.transform.position).normalized;
+
+
+            MoveTo((Vector2)selectedField.transform.position - hereToThereDir, OnEnemyFieldReached);
+        }
     }
 
-    private void OnNormalFieldReached()
+    private void OnFieldReached(Field field)
     {
+        if (field != currentField)
+            field.FieldAction();
+
+        currentField = field;
+
         if (currentRange == 0)
         {
             Debug.Log("Jetzt muss neu gewürfelt werden!", this);
@@ -221,8 +240,32 @@ public class PlayerMovement : MonoBehaviour
                 currentState = PlayerState.Idle;
             }
         }
+    }
 
-        currentField.FieldAction();
+    private void OnEnemyFieldReached(Field field)
+    {
+        EnemyField enemyField = field as EnemyField;
+
+        StartCoroutine(AttackCo(enemyField));
+    }
+
+    private IEnumerator AttackCo(EnemyField enemyField)
+    {
+        currentState = PlayerState.Attacking;
+
+        int hits = Mathf.Min(currentRange, enemyField.stats.GetHP());
+        for (int i = 0; i < hits; i++)
+        {
+            animator.Play("PlayerAttackDown");
+            float animDuration = animator.GetCurrentAnimatorStateInfo(0).length;
+
+            yield return new WaitForSeconds(animDuration);
+        }
+
+        if (enemyField.stats.IsDead())
+            MoveTo(enemyField.transform.position, OnFieldReached);
+        else
+            MoveTo(currentField.transform.position, OnFieldReached);
     }
 
     private int CalculateMovementCost(Field field)
@@ -281,5 +324,6 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 pos = (Vector2)transform.position + new Vector2(0.5f, 0.5f);
         Handles.Label(pos, new GUIContent($"State: {currentState.ToString()}\nRange: {currentRange}"));
+        Handles.DrawAAPolyLine(transform.position, currentField.transform.position);
     }
 }

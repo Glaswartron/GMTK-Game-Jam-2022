@@ -180,13 +180,12 @@ public class FieldPlacer : EditorWindow
 
                     fieldNeighboursProp.arraySize++;
                     fieldNeighboursProp.GetArrayElementAtIndex(fieldNeighboursProp.arraySize - 1)
-                                       .objectReferenceValue = selectedField;
-
+                                       .objectReferenceValue = selectedFieldSO.targetObject;
 
                     SerializedProperty selectedFieldNeighboursProp = selectedFieldSO.FindProperty("neighbours");
                     selectedFieldNeighboursProp.arraySize++;
                     selectedFieldNeighboursProp.GetArrayElementAtIndex(selectedFieldNeighboursProp.arraySize - 1)
-                                               .objectReferenceValue = field;
+                                               .objectReferenceValue = fieldSO.targetObject;
 
                     selectedFieldSO.ApplyModifiedPropertiesWithoutUndo();
                 }

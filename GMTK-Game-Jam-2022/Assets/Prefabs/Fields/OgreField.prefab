@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6060909986211368484}
   - component: {fileID: 3118841836319124128}
-  - component: {fileID: 372770922365303170}
+  - component: {fileID: 5001833406512169553}
   - component: {fileID: 7371398792165093075}
   m_Layer: 0
   m_Name: OgreField
@@ -172,7 +172,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &372770922365303170
+--- !u!114 &5001833406512169553
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -181,13 +181,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 3973698565226098614}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68ac7043671cf3f4dbb4a568bec4840f, type: 3}
+  m_Script: {fileID: 11500000, guid: da1d182453a3e3841ba4e360eb252846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fieldType: 0
   movementCost: 1
   neighbours: []
   highligther: {fileID: 2298283377984980410}
+  HP: 5
 --- !u!58 &7371398792165093075
 CircleCollider2D:
   m_ObjectHideFlags: 0
