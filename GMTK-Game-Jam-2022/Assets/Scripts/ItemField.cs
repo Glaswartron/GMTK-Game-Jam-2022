@@ -29,7 +29,7 @@ public class ItemField : Field
         if (!collected)
         {
             ApplyItem();
-            PlayerMovement.instance.SetAnimationState("CollectItem");
+            PlayerMovement.instance.SetAnimationState("PlayerObtainItem");
             GameManager.instance.OpenItemUI(this);
         }
     }
