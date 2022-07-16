@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
             case PlayerState.Idle:
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    currentRange = RollDice(); // !
+                    currentRange = RollDice(currentRange); // ! Muss rausgenommen werden
                     Debug.Log("Würfelzahl: " + currentRange, this);
 
                     bool canMove = HighlightFields();
@@ -123,10 +123,11 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Generiert einen zufälligen int aus [minInclusive..maxInclusive]
     /// </summary>
-    public int RollDice()
+    public int RollDice(int diceResultFromGM)
     {
         //WICHTIG: Die SelectDice() Methode muss vor dieser Methode aufgerufen werden! Über die UI oder so wahrscheinlich einfach
-        currentRange = GameManager.instance.RollDice();
+        //ToDo: Das ganze hier vlt nochmal anders machen. Den Spieler nicht direkt würfeln lassen und sowas
+        currentRange = diceResultFromGM;
         return currentRange;
     }
 

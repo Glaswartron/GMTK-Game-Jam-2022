@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     [Header("Gameobjects to manage")]
     public GameObject gameOverScreen;
     public GameObject playerUI;
-    public TextMeshProUGUI diceCount;
 
     [Header("Dice Stuff")]
     [Tooltip("Die Anzahl an Würfelwürfen, die der Spieler hat")]
@@ -35,6 +34,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI itemName;
     public TextMeshProUGUI itemDescription;
     public Image itemImage;
+
+    [Header("Main UI")]
+    public GameObject Holder;
+    public TextMeshProUGUI diceCount;
+    public DiceList diceList;
 
     private void Start()
     {
@@ -73,6 +77,8 @@ public class GameManager : MonoBehaviour
         int res = currentDice.Roll();
         cummulatedEyes += res; //Für die Statistik
 
+        PlayerMovement.instance.RollDice(res);
+        Debug.Log(res);
         return res;
     }
 
@@ -81,6 +87,7 @@ public class GameManager : MonoBehaviour
         if(collectedDices.Count < diceCapacity)
         {
             collectedDices.Add(dice);
+            diceList.ActivateDice(collectedDices.Count - 1, dice.diceSprite);
         }
         else
         {
