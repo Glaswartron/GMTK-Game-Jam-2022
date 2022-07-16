@@ -59,8 +59,10 @@ public class ItemField : Field
             case ItemKind.lens:
                 break;
             case ItemKind.extraRoll:
+                GameManager.instance.IncreaseRollsBy(value);
                 break;
             case ItemKind.Gold:
+                GameManager.instance.AddGold(value);
                 break;
         }
     }

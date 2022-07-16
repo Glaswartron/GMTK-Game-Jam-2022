@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     [Header("Metrics")]
     private int cummulatedEyes;
     private int traversedFields;
+    private int gold;
 
     [Header("Technical Stuff")]
     public Transform PlayerStartPosition;
@@ -39,6 +40,11 @@ public class GameManager : MonoBehaviour
     public void IncreaseTraversedFields()
     {
         traversedFields++;
+    }
+
+    public void AddGold(int gold)
+    {
+        this.gold += gold;
     }
 
     #region Dice
@@ -111,7 +117,7 @@ public class GameManager : MonoBehaviour
 
     public void ShowScore(TextMeshProUGUI tmpro)
     {
-        tmpro.text = "Accumulated Eye-Sum: " + cummulatedEyes.ToString() + "\n" + "Fields traversed: " + traversedFields.ToString();
+        tmpro.text = "Accumulated Eye-Sum: " + cummulatedEyes.ToString() + "\n" + "Fields traversed: " + traversedFields.ToString() + "\n" + "Gold:" + gold.ToString();
     }
     #endregion
 }
