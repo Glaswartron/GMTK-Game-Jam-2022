@@ -46,6 +46,9 @@ public class DiceList : MonoBehaviour
 
     public void ButtonEvent(int i)
     {
+        if (PlayerMovement.instance.currentState != PlayerState.Idle)
+            return;
+
         if(!descriptionUI.activeSelf)
         {
             descriptionUI.SetActive(true);

@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public enum PlayerState {Idle, Moving, WaitingForInput, WaitingForField, Attacking};
+public enum PlayerState { Idle, Moving, WaitingForInput, Attacking, HoldingUpItem }
+
+public enum Direction { DOWN, UP, RIGHT, LEFT }
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -15,8 +16,6 @@ public class PlayerMovement : MonoBehaviour
     private Field targetField;
     public PlayerState currentState;
 
-    private Vector2 target;
-
     public bool sword = false;
     public bool brett = false;
     public bool sandboots = false;
@@ -26,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
     public int swordBonus = 1;
 
     private int currentRange;
+
+    private Vector2 target;
 
     private Action<Field> moveToCallback;
 
@@ -48,26 +49,38 @@ public class PlayerMovement : MonoBehaviour
         switch (currentState)
         {
             case PlayerState.Moving:
-                break;
-            case PlayerState.Idle:
-                if (Input.GetKeyDown(KeyCode.Space))
+                // Wenn keine der Animationen bereits läuft...
+                if (!System.Array.Exists(new string[] { "MoveDown", "MoveUp", "MoveRight", "MoveLeft" },
+                    animState => animator.GetCurrentAnimatorStateInfo(0).IsName(animState)))
                 {
-                    currentRange = RollDice(currentRange); // ! Muss rausgenommen werden
-                    Debug.Log("Würfelzahl: " + currentRange, this);
-
-                    bool canMove = HighlightFields();
-                    if (canMove)
-                        currentState = PlayerState.WaitingForInput;
-                    else // Wenn der Spieler sich mit seiner Range nicht mehr bewegen kann
+                    // ...wähle eine passend für die Richtung aus...
+                    Vector2 playerToTarget = target - (Vector2)transform.position;
+                    Direction playerToTargetDir = GetDirectionFromVector(playerToTarget);
+                    switch (playerToTargetDir)
                     {
-                        // TODO: Dem Spieler anzeigen, dass er verkackt hat
-                        Debug.Log("Verkackt! Neu würfeln!", this);
-
-                        currentRange = 0;
-                        currentState = PlayerState.Idle;
+                        // ...und spiele sie
+                        case Direction.DOWN:
+                            animator.Play("MoveDown", 0);
+                            break;
+                        case Direction.UP:
+                            animator.Play("MoveUp", 0);
+                            break;
+                        case Direction.RIGHT:
+                            animator.Play("MoveRight", 0);
+                            break;
+                        case Direction.LEFT:
+                            animator.Play("MoveLeft", 0);
+                            break;
                     }
                 }
-
+                break;
+            case PlayerState.Idle:
+                // Wenn die Idle-Animation nicht läuft, spiele sie
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("IdleDown"))
+                {
+                    Debug.Log("Hello there");
+                    animator.Play("IdleDown", 0);
+                }
 #if UNITY_EDITOR
                 for (int num = 1; num <= 9; num++) {
                     if (Input.GetKeyDown((KeyCode)(48 + num))) {
@@ -91,8 +104,17 @@ public class PlayerMovement : MonoBehaviour
 #endif
                 break;
             case PlayerState.WaitingForInput:
+                // Wenn die Idle-Animation nicht läuft, spiele sie
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("IdleDown"))
+                {
+                    animator.Play("IdleDown", 0);
+                }
                 break;
-            case PlayerState.WaitingForField:
+            case PlayerState.HoldingUpItem:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerObtainItem"))
+                {
+                    animator.Play("PlayerObtainItem", 0);
+                }
                 break;
         }
     }
@@ -123,15 +145,26 @@ public class PlayerMovement : MonoBehaviour
         moveToCallback = callback;
     }
 
-    /// <summary>
-    /// Generiert einen zufälligen int aus [minInclusive..maxInclusive]
-    /// </summary>
-    public int RollDice(int diceResultFromGM)
+    public void RollDice(int diceResultFromGM)
     {
+        if (currentState != PlayerState.Idle)
+            return;
+
         //WICHTIG: Die SelectDice() Methode muss vor dieser Methode aufgerufen werden! Über die UI oder so wahrscheinlich einfach
-        //ToDo: Das ganze hier vlt nochmal anders machen. Den Spieler nicht direkt würfeln lassen und sowas
+
         currentRange = diceResultFromGM;
-        return currentRange;
+
+        bool canMove = HighlightFields();
+        if (canMove)
+            currentState = PlayerState.WaitingForInput;
+        else // Wenn der Spieler sich mit seiner Range nicht mehr bewegen kann
+        {
+            // TODO: Dem Spieler anzeigen, dass er verkackt hat
+            Debug.Log("Verkackt! Neu würfeln!", this);
+
+            currentRange = 0;
+            currentState = PlayerState.Idle;
+        }
     }
 
     public int GetCurrentRange()
@@ -204,7 +237,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (!(selectedField is EnemyField) || ((EnemyField)selectedField).stats.GetHP() <= 0)
         {
-            //currentField = selectedField;
             currentRange -= CalculateMovementCost(selectedField);
 
             GameManager.instance.IncreaseTraversedFields();
@@ -225,10 +257,7 @@ public class PlayerMovement : MonoBehaviour
         field.GetWalkedOn();
 
         if (field != currentField)
-        {
             field.FieldAction();
-            Debug.Log("Hi");
-        }
 
         currentField = field;
 
@@ -272,7 +301,25 @@ public class PlayerMovement : MonoBehaviour
         // Für jeden Hit einmal die Animation abspielen und für die Länge der Animation warten
         for (int i = 0; i < hits; i++)
         {
-            SetAnimationState("PlayerAttackDown");
+            // Animation auswählen je nach Richtung
+            Vector2 playerToEnemy = (Vector2)enemyField.transform.position - (Vector2)transform.position;
+            Direction playerToEnemyDir = GetDirectionFromVector(playerToEnemy);
+            switch (playerToEnemyDir)
+            {
+                case Direction.DOWN:
+                    animator.Play("PlayerAttackDown", 0);
+                    break;
+                case Direction.UP:
+                    animator.Play("PlayerAttackUp", 0);
+                    break;
+                case Direction.RIGHT:
+                    animator.Play("PlayerAttackRight", 0);
+                    break;
+                case Direction.LEFT:
+                    animator.Play("PlayerAttackLeft", 0);
+                    break;
+            }
+
             float animDuration = animator.GetCurrentAnimatorStateInfo(0).length;
 
             currentRange--;
@@ -280,12 +327,13 @@ public class PlayerMovement : MonoBehaviour
             yield return new WaitForSeconds(animDuration);
         }
 
+        // Gegner besiegt => Gehe auf das Feld des Gegners
         if (enemyField.stats.IsDead())
         {
             targetField = enemyField;
             MoveTo(enemyField.transform.position, OnFieldReached);
         }
-        else
+        else // Gegner nicht besiegt => Gehe zurück auf das Feld wo du herkommst
         {
             targetField = currentField;
             MoveTo(currentField.transform.position, OnFieldReached);
@@ -300,9 +348,17 @@ public class PlayerMovement : MonoBehaviour
         ((EnemyField)targetField).TakeHit();
     }
 
-    public void SetAnimationState(string animationName)
+    public void HoldUpItem(bool holdUp)
     {
-        animator.Play(animationName);
+        if (holdUp)
+            currentState = PlayerState.HoldingUpItem;
+        else
+            currentState = PlayerState.Idle;
+    }
+
+    private void SetAnimationState(string animationName)
+    {
+        animator.Play(animationName, 0);
     }
 
     private int CalculateMovementCost(Field field)
@@ -323,6 +379,31 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
         return field.movementCost;
+    }
+
+    /// <summary>
+    /// Bestimmt eindeutig die Richtung, in die ein Vektor zeigt (als Direction). 
+    /// Wenn Nullvektor: DOWN
+    /// </summary>
+    /// <param name="vec">Der Vektor, dessen Richtung bestimmt werden soll</param>
+    /// <returns>Die Richtung, in die der Vektor zeigt (UP, DOWN, LEFT, RIGHT)</returns>
+    public static Direction GetDirectionFromVector(Vector2 vec)
+    {
+        float absMoveX = Mathf.Abs(vec.x);
+        float absMoveY = Mathf.Abs(vec.y);
+
+        /* Ähnlich dem, was der Blend Tree macht, nur dass 
+         * eine eindeutige Richtung rauskommt */
+        if (vec.x > 0 && absMoveX > absMoveY)
+            return Direction.RIGHT;
+        else if (vec.y > 0 && absMoveY > absMoveX)
+            return Direction.UP;
+        else if (vec.x < 0 && absMoveX > absMoveY)
+            return Direction.LEFT;
+        else if (vec.y < 0 && absMoveY > absMoveX)
+            return Direction.DOWN;
+        else
+            return Direction.DOWN;
     }
 
     #region Getter und Setter

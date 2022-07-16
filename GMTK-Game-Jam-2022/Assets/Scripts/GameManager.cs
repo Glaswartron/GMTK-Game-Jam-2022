@@ -77,8 +77,10 @@ public class GameManager : MonoBehaviour
         int res = currentDice.Roll();
         cummulatedEyes += res; //Für die Statistik
 
+        Debug.Log("Würfelwurf: " + res, this);
+
         PlayerMovement.instance.RollDice(res);
-        Debug.Log(res);
+
         return res;
     }
 
@@ -144,7 +146,7 @@ public class GameManager : MonoBehaviour
     public void ItemUIButtonEvent()
     {
         itemUI.SetActive(false);
-        PlayerMovement.instance.SetAnimationState("IdleDown");
+        PlayerMovement.instance.HoldUpItem(true);
     }
     #endregion
 
