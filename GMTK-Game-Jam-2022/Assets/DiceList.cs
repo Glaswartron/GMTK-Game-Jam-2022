@@ -62,7 +62,6 @@ public class DiceList : MonoBehaviour
         else if(descriptionUI.activeSelf && currentDice == i)
         {
             GameManager.instance.SelectDice(i);
-            //ToDo: Animationsfenster vom Würfelwurf und alles machen
             GameManager.instance.RollDice();
             descriptionUI.SetActive(false);
         }

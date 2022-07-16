@@ -40,6 +40,10 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI diceCount;
     public DiceList diceList;
 
+    [Header("Dice Roll UI")]
+    public GameObject diceRollPanel;
+    public TextMeshProUGUI diceRollNumber;
+
     private void Start()
     {
         instance = this;
@@ -65,6 +69,7 @@ public class GameManager : MonoBehaviour
         rolls--;
         if(rolls == 0)
         {
+            // TODO: Nach PlayerMovement am Ende vom Zug?
             GameOver();
         }
         //diceCount.SetText(rolls.ToString()); //UI
@@ -77,11 +82,33 @@ public class GameManager : MonoBehaviour
         int res = currentDice.Roll();
         cummulatedEyes += res; //Für die Statistik
 
+        StartCoroutine(DiceRollCo(res));
+
         Debug.Log("Würfelwurf: " + res, this);
+
+        //PlayerMovement.instance.RollDice(res);
+
+        return res;
+    }
+
+    private IEnumerator DiceRollCo(int res)
+    {
+        diceRollPanel.SetActive(true);
+
+        float rollStartTimestamp = Time.time;
+        while (Time.time - rollStartTimestamp < 2.5f)
+        {
+            diceRollNumber.SetText(currentDice.Roll().ToString());
+            yield return new WaitForSeconds(0.15f);
+        }
+
+        diceRollNumber.SetText(res.ToString());
+
+        yield return new WaitForSeconds(1f);
 
         PlayerMovement.instance.RollDice(res);
 
-        return res;
+        diceRollPanel.SetActive(false);
     }
 
     public void UnlockDice(Dice dice)
