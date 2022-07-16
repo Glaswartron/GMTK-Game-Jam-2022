@@ -106,12 +106,15 @@ public class PlayerMovement : MonoBehaviour
                     = Vector2.MoveTowards(transform.position, target, movementSpeed * Time.fixedDeltaTime);
                 
                 if ((Vector2)transform.position == target)
-                    moveToCallback.Invoke(currentField);
+                    moveToCallback.Invoke(targetField);
 
                 break;
         }
     }
 
+    /// <summary>
+    /// <paramref name="target"/> kann alles sein
+    /// </summary>
     public void MoveTo(Vector2 target, Action<Field> callback = null)
     {
         this.target = target;
@@ -192,6 +195,8 @@ public class PlayerMovement : MonoBehaviour
         if (currentState != PlayerState.WaitingForInput)
             return;
 
+        targetField = selectedField;
+
         foreach (var field in currentField.neighbours)
         {
             field.Unhighlight();
@@ -225,7 +230,6 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Hi");
         }
 
-        Debug.Log(field);
         currentField = field;
 
         if (currentRange == 0)
@@ -262,19 +266,38 @@ public class PlayerMovement : MonoBehaviour
     {
         currentState = PlayerState.Attacking;
 
-        int hits = Mathf.Min(currentRange, enemyField.stats.GetHP());
+        // Die Zahl an Schlägen bis die Moves verbaucht sind oder der Gegner besiegt ist
+        int hits = Mathf.Min(currentRange, enemyField.stats.GetHP()); 
+
+        // Für jeden Hit einmal die Animation abspielen und für die Länge der Animation warten
         for (int i = 0; i < hits; i++)
         {
-            animator.Play("PlayerAttackDown");
+            SetAnimationState("PlayerAttackDown");
             float animDuration = animator.GetCurrentAnimatorStateInfo(0).length;
+
+            currentRange--;
 
             yield return new WaitForSeconds(animDuration);
         }
 
         if (enemyField.stats.IsDead())
+        {
+            targetField = enemyField;
             MoveTo(enemyField.transform.position, OnFieldReached);
+        }
         else
+        {
+            targetField = currentField;
             MoveTo(currentField.transform.position, OnFieldReached);
+        }
+    }
+
+    /// <summary>
+    /// Wird aus dem Animator aufgerufen
+    /// </summary>
+    public void HitEnemy()
+    {
+        ((EnemyField)targetField).TakeHit();
     }
 
     public void SetAnimationState(string animationName)

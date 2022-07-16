@@ -25,7 +25,7 @@ public class Field : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
-    protected void Start()
+    protected virtual void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
