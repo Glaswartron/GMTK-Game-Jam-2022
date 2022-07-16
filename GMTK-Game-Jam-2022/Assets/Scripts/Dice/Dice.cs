@@ -8,6 +8,7 @@ public abstract class Dice : ScriptableObject
     public bool unlocked;
     public Sprite diceSprite;
     public string description;
+    public string name;
 
     public abstract int Roll();
 

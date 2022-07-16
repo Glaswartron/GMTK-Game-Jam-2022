@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -25,10 +26,15 @@ public class GameManager : MonoBehaviour
     [Header("Metrics")]
     private int cummulatedEyes;
     private int traversedFields;
-    private int gold;
 
     [Header("Technical Stuff")]
     public Transform PlayerStartPosition;
+
+    [Header("Item UI")]
+    public GameObject itemUI;
+    public TextMeshProUGUI itemName;
+    public TextMeshProUGUI itemDescription;
+    public Image itemImage;
 
     private void Start()
     {
@@ -42,10 +48,6 @@ public class GameManager : MonoBehaviour
         traversedFields++;
     }
 
-    public void AddGold(int gold)
-    {
-        this.gold += gold;
-    }
 
     #region Dice
     //Standardm‰ﬂig wird der Default Dice ausgew‰hlt
@@ -98,6 +100,47 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    #region Item UI
+    public void OpenItemUI(ItemField item)
+    {
+        itemUI.SetActive(true);
+        switch (item.item)
+        {
+            case ItemKind.extraRoll:
+                ItemUISetUp(null, "You can roll the dice a few more times", item.value.ToString() + " extra rolls");
+                break;
+            case ItemKind.newDice:
+                ItemUISetUp(item.dice.diceSprite, item.dice.description, item.dice.name);
+                break;
+            case ItemKind.Brett:
+                ItemUISetUp(null, "Neat, a piece of wood! With that you can ride waves! Your water-traversal costs will decrease by "+ PlayerMovement.instance.brettBonus.ToString()+".", "Wooden Board");
+                break;
+            case ItemKind.Sword:
+                ItemUISetUp(null, "Neat, a better sword! With that you can fight enemies better! The damage you deal is increased by " + PlayerMovement.instance.swordBonus.ToString() + ".", "Hero's Sword");
+                break;
+            case ItemKind.SandBoots:
+                ItemUISetUp(null, "Neat, better boots! With them you can glide over sand! Your sand-traversal costs will decrease by " + PlayerMovement.instance.sandBootsBonus.ToString() + ".", "Desert Boots");
+                break;
+            case ItemKind.lens:
+                ItemUISetUp(null, "Neat, a piece of our world's map! With that you see more of our planet! Your sight will", "Map-Piece");
+                break;
+        }
+    }
+
+    public void ItemUISetUp(Sprite sprite, string text, string name)
+    {
+        itemImage.sprite = sprite;
+        itemName.SetText(name);
+        itemDescription.SetText(text);
+    }
+
+    public void ItemUIButtonEvent()
+    {
+        itemUI.SetActive(false);
+        PlayerMovement.instance.SetAnimationState("IdleDown");
+    }
+    #endregion
+
     #region GameOver
 
     public void GameOver()
@@ -117,7 +160,7 @@ public class GameManager : MonoBehaviour
 
     public void ShowScore(TextMeshProUGUI tmpro)
     {
-        tmpro.text = "Accumulated Eye-Sum: " + cummulatedEyes.ToString() + "\n" + "Fields traversed: " + traversedFields.ToString() + "\n" + "Gold:" + gold.ToString();
+        tmpro.text = "Accumulated Eye-Sum: " + cummulatedEyes.ToString() + "\n" + "Fields traversed: " + traversedFields.ToString();
     }
     #endregion
 }

@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float movementSpeed;
     public Field currentField;
+    private Field targetField;
     public PlayerState currentState;
 
     private Vector2 target;
@@ -169,6 +170,7 @@ public class PlayerMovement : MonoBehaviour
     public bool HighlightFields()
     {
         bool somethingHighlighted = false;
+        Debug.Log(currentField);
         foreach (var field in currentField.neighbours)
         {
             if (CheckDistance(field))
@@ -196,12 +198,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (!(selectedField is EnemyField) || ((EnemyField)selectedField).stats.GetHP() <= 0)
         {
-            currentField = selectedField;
+            //currentField = selectedField;
             currentRange -= CalculateMovementCost(selectedField);
 
             GameManager.instance.IncreaseTraversedFields();
 
-            MoveTo(currentField.transform.position, OnFieldReached);
+            MoveTo(selectedField.transform.position, OnFieldReached);
         } 
         else
         {
@@ -214,9 +216,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnFieldReached(Field field)
     {
-        if (field != currentField)
-            field.FieldAction();
+        field.GetWalkedOn();
 
+        if (field != currentField)
+        {
+            field.FieldAction();
+            Debug.Log("Hi");
+        }
+
+        Debug.Log(field);
         currentField = field;
 
         if (currentRange == 0)
@@ -266,6 +274,11 @@ public class PlayerMovement : MonoBehaviour
             MoveTo(enemyField.transform.position, OnFieldReached);
         else
             MoveTo(currentField.transform.position, OnFieldReached);
+    }
+
+    public void SetAnimationState(string animationName)
+    {
+        animator.Play(animationName);
     }
 
     private int CalculateMovementCost(Field field)

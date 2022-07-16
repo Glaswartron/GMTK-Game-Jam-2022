@@ -130,8 +130,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6daa922a65fa22f4ca9caf9fa11f129d
-      internalID: 1868725102
+      spriteID: df88d429e97ab4247bd93898fabc23cb
+      internalID: 1647613331
       vertices: []
       indices: 
       edges: []
@@ -151,8 +151,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2156a67fbba444f4596ab19968196a2e
-      internalID: 1347605742
+      spriteID: a719d24eb2f611b4ea832c24fbcdf0f5
+      internalID: 639718480
       vertices: []
       indices: 
       edges: []
@@ -172,8 +172,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04f443df92ab1de4fa5162e3b9958c3f
-      internalID: 1970898345
+      spriteID: add8f40d9589cab4c8691d34990b1771
+      internalID: -1522169858
       vertices: []
       indices: 
       edges: []
@@ -193,8 +193,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0643b6a65a61502428fdc022bf77e302
-      internalID: -1935857956
+      spriteID: df616d58b11180443870af4953a4edab
+      internalID: -971357008
       vertices: []
       indices: 
       edges: []
@@ -214,8 +214,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 12df34f89f9241b4dad5d4892e1ecf8c
-      internalID: -1650366665
+      spriteID: 21a1644c29275964e820b77eff6e9f15
+      internalID: 723783009
       vertices: []
       indices: 
       edges: []
@@ -235,8 +235,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 57bd2f7abc74840458546d2def615e9d
-      internalID: -343130123
+      spriteID: b2962d4c59fabf346a7c438974f754bb
+      internalID: -1616904445
       vertices: []
       indices: 
       edges: []
@@ -252,12 +252,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Fields2_4: -1650366665
-      Fields2_0: 1868725102
-      Fields2_3: -1935857956
-      Fields2_5: -343130123
-      Fields2_1: 1347605742
-      Fields2_2: 1970898345
+      Fields2_4: 723783009
+      Fields2_0: 1647613331
+      Fields2_3: -971357008
+      Fields2_5: -1616904445
+      Fields2_1: 639718480
+      Fields2_2: -1522169858
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
