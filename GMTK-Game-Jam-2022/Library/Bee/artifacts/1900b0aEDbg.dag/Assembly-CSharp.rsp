@@ -379,6 +379,7 @@
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/ItemField.cs"
 "Assets/Scripts/PlayerMovement.cs"
+"Assets/Scripts/SceneFader.cs"
 -langversion:9.0
 
 /deterministic
