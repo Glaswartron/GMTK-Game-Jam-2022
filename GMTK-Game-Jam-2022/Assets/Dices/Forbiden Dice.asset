@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unlocked: 0
   diceSprite: {fileID: 21300000, guid: a880978d0111c23479985a712af17635, type: 3}
-  diceHighlightedSprite: {fileID: 0}
-  dicePressedSprite: {fileID: 0}
+  diceHighlightedSprite: {fileID: 21300000, guid: 8fd3c5cb23a0c1d469a47c3af202fb10, type: 3}
+  dicePressedSprite: {fileID: 21300000, guid: efc9d0a2801a43342b41c421cddfb901, type: 3}
   description: An ancient Dice, which has been around for ages. Legends say, it can
     roll a 15, but ... those are only legends, right?
   diceName: Forbidden dice

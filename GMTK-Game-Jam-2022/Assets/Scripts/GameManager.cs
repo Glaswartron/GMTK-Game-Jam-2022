@@ -50,6 +50,9 @@ public class GameManager : MonoBehaviour
     public GameObject diceRollPanel;
     public TextMeshProUGUI diceRollNumber;
 
+    [Header("GameWon Stuff")]
+    public GameObject gameWonScreen;
+
     private void Start()
     {
         instance = this;
@@ -237,5 +240,6 @@ public class GameManager : MonoBehaviour
     public void WinGame()
     {
         AudioManager.instance.StopMusic();
+        gameWonScreen.SetActive(true);
     }
 }
