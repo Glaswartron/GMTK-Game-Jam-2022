@@ -46,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        GameManager.instance.SetRangeText(currentRange);
         switch (currentState)
         {
             case PlayerState.Moving:
