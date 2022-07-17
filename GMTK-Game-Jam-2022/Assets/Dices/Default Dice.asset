@@ -15,5 +15,6 @@ MonoBehaviour:
   unlocked: 0
   diceSprite: {fileID: 0}
   description: Default Dice. Range 1 to 6
+  name: Standard Dice
   min: 1
   max: 6

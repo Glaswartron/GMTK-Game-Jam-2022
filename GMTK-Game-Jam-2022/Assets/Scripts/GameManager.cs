@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviour
         switch (item.item)
         {
             case ItemKind.extraRoll:
-                ItemUISetUp(null, "You can roll the dice a few more times", item.value.ToString() + " extra rolls");
+                ItemUISetUp(ExtraRollsSprite, "You can roll the dice a few more times", item.value.ToString() + " extra rolls");
                 break;
             case ItemKind.newDice:
                 ItemUISetUp(item.dice.diceSprite, item.dice.description, item.dice.name);
@@ -190,14 +190,15 @@ public class GameManager : MonoBehaviour
         gameOverScreen.SetActive(true);
     }
 
-    public void Retry()
+    public void Retry(TextMeshProUGUI t)
     {
+        t.SetText("Created by Glaswartron and BelmontR / RBolton. Thanks for watching the Credits ^^");
         //ToDo: Resette alles
     }
 
     public void BackToMainMenu()
     {
-
+        SceneFader.instance.SwitchToScene("StartScene", 3);
     }
 
     public void ShowScore(TextMeshProUGUI tmpro)
