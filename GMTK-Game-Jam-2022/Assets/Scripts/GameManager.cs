@@ -230,4 +230,9 @@ public class GameManager : MonoBehaviour
         tmpro.text = "Accumulated Eye-Sum: " + cummulatedEyes.ToString() + "\n" + "Fields traversed: " + traversedFields.ToString();
     }
     #endregion
+
+    public void WinGame()
+    {
+
+    }
 }
