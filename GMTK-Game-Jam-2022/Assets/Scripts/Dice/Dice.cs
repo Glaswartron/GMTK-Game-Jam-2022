@@ -6,9 +6,13 @@ using UnityEngine;
 public abstract class Dice : ScriptableObject
 {
     public bool unlocked;
+
     public Sprite diceSprite;
+    public Sprite diceHighlightedSprite;
+    public Sprite dicePressedSprite;
+
     public string description;
-    public string name;
+    public string diceName;
 
     public abstract int Roll();
 

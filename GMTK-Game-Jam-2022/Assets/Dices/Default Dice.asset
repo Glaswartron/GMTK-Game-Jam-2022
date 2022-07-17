@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Default Dice
   m_EditorClassIdentifier: 
   unlocked: 0
-  diceSprite: {fileID: 0}
+  diceSprite: {fileID: 21300000, guid: ef71e334f5959b94f95bfd32027bf365, type: 3}
+  diceHighlightedSprite: {fileID: 21300000, guid: ca6b799c6dce2d948ba927144c66cd3c, type: 3}
+  dicePressedSprite: {fileID: 21300000, guid: ab085147712da6a438cf8c87c77060b8, type: 3}
   description: Default Dice. Range 1 to 6
-  name: Standard Dice
+  diceName: Default
   min: 1
   max: 6

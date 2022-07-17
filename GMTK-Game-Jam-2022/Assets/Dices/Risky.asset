@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Risky
   m_EditorClassIdentifier: 
   unlocked: 0
-  diceSprite: {fileID: 0}
+  diceSprite: {fileID: 21300000, guid: 02effcbddfa3ce34f87443a822464aa1, type: 3}
+  diceHighlightedSprite: {fileID: 21300000, guid: ac7d526ed301d714c97942d8d01cc7c4, type: 3}
+  dicePressedSprite: {fileID: 21300000, guid: ba5bd4fd210f4bd429b3ec2410729b98, type: 3}
   description: 50%-Chance to land on 1, 16,6%-Chance each to land on 2,3 or 10
-  name: Risky Dice o' Reily
+  diceName: Risky Dice o' Reily
   Sides: 0100000001000000010000000a0000000300000002000000

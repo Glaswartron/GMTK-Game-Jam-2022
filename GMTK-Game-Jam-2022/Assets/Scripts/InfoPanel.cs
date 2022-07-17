@@ -13,6 +13,8 @@ public class InfoPanel : MonoBehaviour
 
     private void Start()
     {
+        instance = this;
+
         animator = GetComponent<Animator>();
     }
 

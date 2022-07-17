@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Dice
   m_EditorClassIdentifier: 
   unlocked: 0
-  diceSprite: {fileID: 0}
+  diceSprite: {fileID: 21300000, guid: a99440d21d97d0b498ae2a3c8fc32e87, type: 3}
+  diceHighlightedSprite: {fileID: 21300000, guid: c9b48c385aa5ea14e8998218b85ca57f, type: 3}
+  dicePressedSprite: {fileID: 21300000, guid: 159034f62d33b1b44b6eeb25cca0a604, type: 3}
   description: Can land between 1 and 8. This dice is superior
-  name: Advanced Dice
+  diceName: 8-sided
   min: 1
   max: 8

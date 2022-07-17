@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEditor;
 using UnityEngine;
 
-public enum PlayerState { Idle, Moving, WaitingForInput, Attacking, HoldingUpItem }
+public enum PlayerState { Idle, Moving, WaitingForDice, WaitingForInput, Attacking, HoldingUpItem }
 
 public enum Direction { DOWN, UP, RIGHT, LEFT }
 
@@ -93,8 +93,7 @@ public class PlayerMovement : MonoBehaviour
                             currentState = PlayerState.WaitingForInput;
                         else // Wenn der Spieler sich mit seiner Range nicht mehr bewegen kann
                         {
-                            // TODO: Dem Spieler anzeigen, dass er verkackt hat
-                            Debug.Log("Verkackt! Neu würfeln!", this);
+                            InfoPanel.instance.Show("Unlucky! You can't get anywhere from here with the movement points you have! Roll again!");
 
                             currentRange = 0;
                             currentState = PlayerState.Idle;
@@ -148,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void RollDice(int diceResultFromGM)
     {
-        if (currentState != PlayerState.Idle)
+        if (currentState != PlayerState.WaitingForDice)
             return;
 
         //WICHTIG: Die SelectDice() Methode muss vor dieser Methode aufgerufen werden! Über die UI oder so wahrscheinlich einfach
@@ -160,8 +159,7 @@ public class PlayerMovement : MonoBehaviour
             currentState = PlayerState.WaitingForInput;
         else // Wenn der Spieler sich mit seiner Range nicht mehr bewegen kann
         {
-            // TODO: Dem Spieler anzeigen, dass er verkackt hat
-            Debug.Log("Verkackt! Neu würfeln!", this);
+            InfoPanel.instance.Show("Unlucky! You can't get anywhere from here with the movement points you have! Roll again!");
 
             currentRange = 0;
             currentState = PlayerState.Idle;
@@ -282,8 +280,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else // Wenn der Spieler sich mit seiner Range nicht mehr bewegen kann
             {
-                // TODO: Dem Spieler anzeigen, dass er verkackt hat
-                Debug.Log("Verkackt! Neu würfeln!", this);
+                InfoPanel.instance.Show("Unlucky! You can't get anywhere from here with the movement points you have! Roll again!");
 
                 currentRange = 0;
                 if (currentState != PlayerState.HoldingUpItem)

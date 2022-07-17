@@ -24,10 +24,23 @@ public class DiceList : MonoBehaviour
         dices[0].SetActive(true);
     }
 
-    public void ActivateDice(int index, Sprite sprite)
+    public void ActivateDice(int index, Sprite sprite, Sprite highlightedSprite, Sprite pressedSprite)
     {
         dices[index].SetActive(true);
-        dices[index].GetComponent<Image>().sprite = sprite;
+        Button diceButton = dices[index].GetComponent<Button>();
+        diceButton.targetGraphic.GetComponent<Image>().sprite = sprite;
+
+        if (highlightedSprite != null && pressedSprite != null)
+        {
+            SpriteState spriteState = new SpriteState();
+            if (highlightedSprite != null)
+                spriteState.highlightedSprite = highlightedSprite;
+            if (pressedSprite != null)
+                spriteState.pressedSprite = pressedSprite;
+
+            diceButton.spriteState = spriteState;
+        }
+        
     }
 
     public void ToggleAnimationState()
@@ -49,7 +62,7 @@ public class DiceList : MonoBehaviour
         if (PlayerMovement.instance.currentState != PlayerState.Idle)
             return;
 
-        if(!descriptionUI.activeSelf)
+        if (!descriptionUI.activeSelf)
         {
             descriptionUI.SetActive(true);
             ChangeDescription(i);
@@ -61,6 +74,11 @@ public class DiceList : MonoBehaviour
         }
         else if(descriptionUI.activeSelf && currentDice == i)
         {
+            if (PlayerMovement.instance.currentState != PlayerState.Idle)
+                return;
+
+            PlayerMovement.instance.currentState = PlayerState.WaitingForDice;
+
             GameManager.instance.SelectDice(i);
             GameManager.instance.RollDice();
             descriptionUI.SetActive(false);
@@ -70,7 +88,7 @@ public class DiceList : MonoBehaviour
 
     private void ChangeDescription(int i)
     {
-        name.SetText(GameManager.instance.collectedDices[i].name);
+        name.SetText(GameManager.instance.collectedDices[i].diceName);
         descr.SetText(GameManager.instance.collectedDices[i].description);
     }
 }

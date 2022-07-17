@@ -55,6 +55,8 @@ public class GameManager : MonoBehaviour
         instance = this;
         collectedDices = new List<Dice>();
         collectedDices.Add(defaultDice);
+
+        AudioManager.instance.StartMusic();
     }
 
     public void IncreaseTraversedFields()
@@ -146,7 +148,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Würfel sollte hinzugefügt werden");
             collectedDices.Add(dice);
-            diceList.ActivateDice(collectedDices.Count - 1, dice.diceSprite);
+            diceList.ActivateDice(collectedDices.Count - 1, dice.diceSprite, dice.diceHighlightedSprite, dice.dicePressedSprite);
         }
         else
         {
@@ -176,7 +178,7 @@ public class GameManager : MonoBehaviour
                 ItemUISetUp(ExtraRollsSprite, "You can roll the dice a few more times", item.value.ToString() + " extra rolls");
                 break;
             case ItemKind.newDice:
-                ItemUISetUp(item.dice.diceSprite, item.dice.description, item.dice.name);
+                ItemUISetUp(item.dice.diceSprite, item.dice.description, item.dice.diceName);
                 break;
             case ItemKind.Brett:
                 ItemUISetUp(BrettSprite, "Neat, a piece of wood! With that you can ride waves! Your water-traversal costs will decrease by "+ PlayerMovement.instance.brettBonus.ToString()+".", "Wooden Board");
@@ -211,6 +213,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        AudioManager.instance.StopMusic();
         gameOverScreen.SetActive(true);
     }
 
@@ -233,6 +236,6 @@ public class GameManager : MonoBehaviour
 
     public void WinGame()
     {
-
+        AudioManager.instance.StopMusic();
     }
 }

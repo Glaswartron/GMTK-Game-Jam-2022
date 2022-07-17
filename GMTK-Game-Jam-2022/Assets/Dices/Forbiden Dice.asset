@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Forbiden Dice
   m_EditorClassIdentifier: 
   unlocked: 0
-  diceSprite: {fileID: 0}
-  description: A ancient Dice, which has been around for ages. Legends say, it can
+  diceSprite: {fileID: 21300000, guid: a880978d0111c23479985a712af17635, type: 3}
+  diceHighlightedSprite: {fileID: 0}
+  dicePressedSprite: {fileID: 0}
+  description: An ancient Dice, which has been around for ages. Legends say, it can
     roll a 15, but ... those are only legends, right?
-  name: Forbidden Dice
+  diceName: Forbidden dice
   Sides: 0000000000000000000000000100000001000000010000000f000000
