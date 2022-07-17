@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     public Sprite BootsSprite;
     public Sprite SwordSprite;
     public Sprite BrettSprite;
+    public Sprite ExtraRollsSprite;
 
     [Header("Main UI")]
     public GameObject Holder;
@@ -75,7 +76,7 @@ public class GameManager : MonoBehaviour
             // TODO: Nach PlayerMovement am Ende vom Zug?
             GameOver();
         }
-        //diceCount.SetText(rolls.ToString()); //UI
+        diceCount.SetText(rolls.ToString()); //UI
 
         if(currentDice == null) //Sollte eigentlich NIE vorkommen
         {
@@ -116,8 +117,10 @@ public class GameManager : MonoBehaviour
 
     public void UnlockDice(Dice dice)
     {
+        Debug.Log("UnlockDice wurde aufgerufen");
         if(collectedDices.Count < diceCapacity)
         {
+            Debug.Log("Würfel sollte hinzugefügt werden");
             collectedDices.Add(dice);
             diceList.ActivateDice(collectedDices.Count - 1, dice.diceSprite);
         }
@@ -169,7 +172,7 @@ public class GameManager : MonoBehaviour
     public void ItemUISetUp(Sprite sprite, string text, string name)
     {
         itemImage.sprite = sprite;
-        itemName.SetText(name);
+        itemName.SetText("You obtained " + name);
         itemDescription.SetText(text);
     }
 

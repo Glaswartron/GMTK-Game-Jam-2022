@@ -273,14 +273,23 @@ public class PlayerMovement : MonoBehaviour
 
             bool canMove = HighlightFields();
             if (canMove)
-                currentState = PlayerState.WaitingForInput;
+            {
+                if (currentState != PlayerState.HoldingUpItem)
+                {
+                    currentState = PlayerState.WaitingForInput;
+                }
+            }
             else // Wenn der Spieler sich mit seiner Range nicht mehr bewegen kann
             {
                 // TODO: Dem Spieler anzeigen, dass er verkackt hat
                 Debug.Log("Verkackt! Neu würfeln!", this);
 
                 currentRange = 0;
-                currentState = PlayerState.Idle;
+                if (currentState != PlayerState.HoldingUpItem)
+                {
+                    currentState = PlayerState.Idle;
+                }
+                
             }
         }
     }
@@ -351,10 +360,24 @@ public class PlayerMovement : MonoBehaviour
 
     public void HoldUpItem(bool holdUp)
     {
+        Debug.Log("Hello there");
         if (holdUp)
+        {
+            Debug.Log("Wat????");
             currentState = PlayerState.HoldingUpItem;
+        }
         else
-            currentState = PlayerState.Idle;
+        {
+            bool canMove = HighlightFields();
+            if (canMove)
+            {
+                currentState = PlayerState.WaitingForInput;
+            }
+            else
+            {
+                currentState = PlayerState.Idle;
+            }
+        }
     }
 
     private void SetAnimationState(string animationName)
