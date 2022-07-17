@@ -27,7 +27,7 @@ public class ItemField : Field
     {
         if (!collected)
         {
-            Debug.Log("FUUUUUUUUUUUUUUUUUUCK");
+            //Debug.Log("FUUUUUUUUUUUUUUUUUUCK");
             PlayerMovement.instance.HoldUpItem(true);
             ApplyItem();
             GameManager.instance.OpenItemUI(this);
@@ -71,6 +71,7 @@ public class ItemField : Field
                 }
                 break;
             case ItemKind.lens:
+                CameraFollow.instance.ZoomOut();
                 break;
             case ItemKind.extraRoll:
                 GameManager.instance.IncreaseRollsBy(value);

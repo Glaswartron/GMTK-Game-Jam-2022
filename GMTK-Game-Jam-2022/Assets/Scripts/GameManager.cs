@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     public Sprite SwordSprite;
     public Sprite BrettSprite;
     public Sprite ExtraRollsSprite;
+    public Sprite MapSprite;
 
     [Header("Main UI")]
     public GameObject Holder;
@@ -58,6 +59,17 @@ public class GameManager : MonoBehaviour
     public void IncreaseTraversedFields()
     {
         traversedFields++;
+    }
+
+    public void ToggleMovementCostVisuals()
+    {
+        foreach (Transform child in transform)
+        {
+            if(child.GetComponent<Field>() != null)
+            {
+                child.GetComponent<Field>().ToggleMovementCostVisual();
+            }
+        }
     }
 
 
@@ -164,7 +176,7 @@ public class GameManager : MonoBehaviour
                 ItemUISetUp(BootsSprite, "Neat, better boots! With them you can glide over sand! Your sand-traversal costs will decrease by " + PlayerMovement.instance.sandBootsBonus.ToString() + ".", "Desert Boots");
                 break;
             case ItemKind.lens:
-                ItemUISetUp(null, "Neat, a piece of our world's map! With that you see more of our planet! Your sight will", "Map-Piece");
+                ItemUISetUp(MapSprite, "Neat, a piece of our world's map! With that you see more of our planet! Your sight will", "Map-Piece");
                 break;
         }
     }

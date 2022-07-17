@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using TMPro;
 
 public enum FieldType { Normal, Sand, Water, Ice}
 
@@ -20,8 +21,13 @@ public class Field : MonoBehaviour
     public Sprite normalSprite;
     public Sprite walkedOnSprite;
 
+    public Sprite hoverOverSprite;
+    public Sprite hoverOverWalkedOnSprite;
+
     protected bool highlighted;
     protected bool walkedOn = false;
+
+    public TextMeshProUGUI mcostVisual;
 
     private SpriteRenderer spriteRenderer;
 
@@ -64,6 +70,20 @@ public class Field : MonoBehaviour
         }
     }
 
+    public void HoverLight()
+    {
+        //ToDo: Das Objekt Highlighten.
+        if (!walkedOn)
+        {
+            spriteRenderer.sprite = hoverOverSprite;
+        }
+        else
+        {
+            spriteRenderer.sprite = hoverOverWalkedOnSprite;
+        }
+    }
+
+
     public virtual void OnSelected()
     {
         PlayerMovement.instance.SelectField(this); // Unhighlighted die Felder
@@ -74,12 +94,36 @@ public class Field : MonoBehaviour
         walkedOn = true;
     }
 
+    public virtual void ToggleMovementCostVisual()
+    {
+        if(mcostVisual.gameObject.activeSelf)
+        {
+            mcostVisual.gameObject.SetActive(false);
+        }
+        else
+        {
+            mcostVisual.gameObject.SetActive(true);
+            mcostVisual.SetText(movementCost.ToString());
+        }
+    }
+
     //Wichtig, damit das geht, brauchen die Fields Collider!!! Glaube ich
     private void OnMouseOver()
     {
-        if(Input.GetMouseButtonDown(0) && highlighted)
+        if(highlighted)
         {
-            OnSelected();
+            HoverLight();
+            if (Input.GetMouseButtonDown(0))
+            {
+                OnSelected();
+            }
+        }
+    }
+    private void OnMouseExit()
+    {
+        if(highlighted)
+        {
+            Highlight();
         }
     }
 

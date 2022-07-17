@@ -6,11 +6,13 @@ public class CameraFollow : MonoBehaviour
 {
     public Transform player;
     public int ZoomOutFactor = 2;
+    public int DefaultZoom = 5;
     public static CameraFollow instance;
 
     private void Start()
     {
         instance = this;
+        GetComponent<Camera>().orthographicSize = DefaultZoom;
     }
     // Update is called once per frame
     void Update()

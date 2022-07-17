@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class EnemyField : Field
 {
@@ -8,6 +9,8 @@ public class EnemyField : Field
     public int HP;
     public Stats stats;
     public GameObject enemyVisual;
+
+    public TextMeshProUGUI HPVisual;
     //ToDo: Enemy Visual einbauen
 
     private Animator animator;
@@ -32,6 +35,7 @@ public class EnemyField : Field
         animator.Play("EnemyHit"+hitAnimIdx, 0);
 
         stats.ReduceHP(1);
+        HPVisual.SetText(stats.GetHP().ToString() + " HP");
 
         if (stats.IsDead())
         {
@@ -43,6 +47,23 @@ public class EnemyField : Field
     {
         yield return new WaitForSeconds(delay);
         enemyVisual.SetActive(false);
+    }
+
+    public override void ToggleMovementCostVisual()
+    {
+        if (mcostVisual.gameObject.activeSelf)
+        {
+            mcostVisual.gameObject.SetActive(false);
+            HPVisual.gameObject.SetActive(false);
+        }
+        else
+        {
+            mcostVisual.gameObject.SetActive(true);
+            mcostVisual.SetText(movementCost.ToString());
+
+            HPVisual.gameObject.SetActive(true);
+            HPVisual.SetText(stats.GetHP().ToString() + "HP");
+        }
     }
 
     /*private bool Fight(int playerDiceResult)
