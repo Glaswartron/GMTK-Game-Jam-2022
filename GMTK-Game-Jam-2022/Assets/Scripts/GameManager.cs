@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     public GameObject Holder;
     public TextMeshProUGUI diceCount;
     public DiceList diceList;
+    public TextMeshProUGUI rangeText;
 
     [Header("Dice Roll UI")]
     public GameObject diceRollPanel;
@@ -124,7 +125,18 @@ public class GameManager : MonoBehaviour
 
         PlayerMovement.instance.RollDice(res);
 
+        rangeText.gameObject.SetActive(true);
+        rangeText.SetText(res.ToString());
         diceRollPanel.SetActive(false);
+    }
+
+    public void SetRangeText(int value)
+    {
+        rangeText.SetText(value.ToString());
+        if(value == 0)
+        {
+            rangeText.gameObject.SetActive(false);
+        }
     }
 
     public void UnlockDice(Dice dice)
@@ -218,4 +230,9 @@ public class GameManager : MonoBehaviour
         tmpro.text = "Accumulated Eye-Sum: " + cummulatedEyes.ToString() + "\n" + "Fields traversed: " + traversedFields.ToString();
     }
     #endregion
+
+    public void WinGame()
+    {
+
+    }
 }
