@@ -34,13 +34,6 @@ public class ItemField : Field
         }
     }
 
-    public override void OnSelected()
-    {
-        PlayerMovement.instance.SelectField(this);
-        highlighted = false;
-
-    }
-
     private void ApplyItem()
     {
         PlayerMovement player = PlayerMovement.instance;
@@ -68,6 +61,10 @@ public class ItemField : Field
                 if(!GameManager.instance.DiceInventoryFull())
                 {
                     GameManager.instance.UnlockDice(dice);
+                }
+                else
+                {
+                    InfoPanel.instance.Show("You can only carry 4 dice at once. If you want this dice, try next time");
                 }
                 break;
             case ItemKind.lens:

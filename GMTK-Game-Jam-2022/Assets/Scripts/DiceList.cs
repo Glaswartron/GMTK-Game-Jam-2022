@@ -62,6 +62,11 @@ public class DiceList : MonoBehaviour
         if (PlayerMovement.instance.currentState != PlayerState.Idle)
             return;
 
+        if (GameManager.instance.itemUI.activeSelf)
+            return;
+
+        AudioManager.instance.Play("Press");
+
         if (!descriptionUI.activeSelf)
         {
             descriptionUI.SetActive(true);
@@ -71,6 +76,7 @@ public class DiceList : MonoBehaviour
         else if(descriptionUI.activeSelf && currentDice != i)
         {
             ChangeDescription(i);
+            currentDice = i;
         }
         else if(descriptionUI.activeSelf && currentDice == i)
         {

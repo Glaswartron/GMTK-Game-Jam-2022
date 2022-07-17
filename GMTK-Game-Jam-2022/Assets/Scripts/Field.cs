@@ -86,6 +86,8 @@ public class Field : MonoBehaviour
 
     public virtual void OnSelected()
     {
+        AudioManager.instance.Play("Press");
+
         PlayerMovement.instance.SelectField(this); // Unhighlighted die Felder
     }
 

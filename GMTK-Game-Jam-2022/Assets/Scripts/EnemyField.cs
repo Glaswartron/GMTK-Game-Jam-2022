@@ -35,7 +35,12 @@ public class EnemyField : Field
         animator.Play("EnemyHit"+hitAnimIdx, 0);
 
         stats.ReduceHP(1);
-        HPVisual.SetText(stats.GetHP().ToString() + " HP");
+        if (stats.GetHP() > 0)
+            HPVisual.SetText(stats.GetHP().ToString() + " HP");
+        else
+            HPVisual.gameObject.SetActive(false);
+
+        AudioManager.instance.Play("OgreHit");
 
         if (stats.IsDead())
         {

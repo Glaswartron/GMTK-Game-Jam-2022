@@ -32,21 +32,24 @@ public class PlayerMovement : MonoBehaviour
 
     private Animator animator;
 
+    private float lastMovingSoundTimestamp;
+
     private void Start()
     {
         instance = this;
 
         animator = GetComponent<Animator>();
 
-        // Position vom Spieler in die Mitte vom ersten Feld setzen
-        transform.position = currentField.transform.position;
+        // Den Spieler mit den Füßen in die Mitte vom ersten Feld setzen
+        transform.position = (Vector2)currentField.transform.position + Vector2.up * 0.5f;
 
         currentState = PlayerState.Idle;
+
+        lastMovingSoundTimestamp = Mathf.NegativeInfinity;
     }
 
     private void Update()
     {
-        GameManager.instance.SetRangeText(currentRange);
         switch (currentState)
         {
             case PlayerState.Moving:
@@ -73,6 +76,16 @@ public class PlayerMovement : MonoBehaviour
                             animator.Play("MoveLeft", 0);
                             break;
                     }
+                }
+                if (targetField.fieldType != FieldType.Water && Time.time - lastMovingSoundTimestamp > 0.5f)
+                {
+                    AudioManager.instance.Play("Walk");
+                    lastMovingSoundTimestamp = Time.time;
+                }
+                else if (targetField.fieldType == FieldType.Water && Time.time - lastMovingSoundTimestamp > 1f)
+                {
+                    AudioManager.instance.Play("Swim");
+                    lastMovingSoundTimestamp = Time.time;
                 }
                 break;
             case PlayerState.Idle:
@@ -139,7 +152,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void MoveTo(Vector2 target, Action<Field> callback = null)
     {
-        this.target = target;
+        this.target = target + Vector2.up * 0.5f;
         currentState = PlayerState.Moving;
 
         moveToCallback = callback;
@@ -328,9 +341,11 @@ public class PlayerMovement : MonoBehaviour
                     break;
             }
 
-            float animDuration = animator.GetCurrentAnimatorStateInfo(0).length;
-
             currentRange--;
+
+            AudioManager.instance.Play("SwordSwing");
+
+            float animDuration = animator.GetCurrentAnimatorStateInfo(0).length;
 
             yield return new WaitForSeconds(animDuration);
         }
